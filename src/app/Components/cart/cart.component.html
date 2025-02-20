@@ -1,117 +1,113 @@
- <!-- cart view end --> 
-<div class="modal fade" id="modallong" tabindex="-1" aria-modal="true" role="dialog">
-    <div class="modal-dialog modal-fullscreen-md-down modal-md modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title fs-5">Cart</h2>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <div class="shopping-cart">
-            <div class="shopping-cart-content">
-              <div class="mini-cart cart-list p-0 mt-3">
-                <div class="mini-cart-item d-flex border-bottom pb-3">
-                  <div class="col-lg-2 col-md-3 col-sm-2 me-4">
-                    <a href="#" title="product-image">
-                      <img src="assets/images/single-product-thumb1.jpg" class="img-fluid" alt="single-product-item">
-                    </a>
-                  </div>
-                  <div class="col-lg-9 col-md-8 col-sm-8">
-                    <div class="product-header d-flex justify-content-between align-items-center mb-3">
-                      <h4 class="product-title fs-6 me-5">Sport Shoes For Men</h4>
-                      <a href="" class="remove" aria-label="Remove this item" data-product_id="11913"
-                        data-cart_item_key="abc" data-product_sku="">
-                        <svg class="close">
-                          <use xlink:href="#close"></use>
-                        </svg>
-                      </a>
-                    </div>
-                    <div class="quantity-price d-flex justify-content-between align-items-center">
-                      <div class="input-group product-qty">
-                        <button type="button"
-                          class="quantity-left-minus btn btn-light rounded-0 rounded-start btn-number"
-                          data-type="minus">
-                          <svg width="16" height="16">
-                            <use xlink:href="#minus"></use>
-                          </svg>
-                        </button>
-                        <input type="text" name="quantity" class="form-control input-number quantity" value="1">
-                        <button type="button" class="quantity-right-plus btn btn-light rounded-0 rounded-end btn-number"
-                          data-type="plus">
-                          <svg width="16" height="16">
-                            <use xlink:href="#plus"></use>
-                          </svg>
-                        </button>
-                      </div>
-                      <div class="price-code">
-                        <span class="product-price fs-6">$99</span>
-                      </div>
-                    </div>
-                    <!-- quantity-price -->
-                  </div>
+<div class="test">
+ <div class="container">
+    <div class="row">
+        <aside class="col-lg-9">
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table table-borderless table-shopping-cart">
+                        <thead class="text-muted">
+                            <tr class="small text-uppercase">
+                                <th scope="col">Food</th>
+                                <th scope="col" width="120">Quantity</th>
+                                <th scope="col" width="120">Price</th>
+                                <th scope="col" class="text-right d-none d-md-block d-block" width="200"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <figure class="itemside align-items-center">
+                                        <div class="aside"><img src="assets/images/f1.png" class="img-sm"></div>
+                                        <figcaption class="info"> <a href="#" class="title text-dark" data-abc="true">Tshirt with round nect</a>
+                                            <p class="text-muted small">SIZE: L <br> Brand: MAXTRA</p>
+                                        </figcaption>
+                                    </figure>
+                                </td>
+                                <td> <select class="form-control">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                    </select> </td>
+                                <td>
+                                    <div class="price-wrap"> <var class="price">$10.00</var> <small class="text-muted"> $9.20 each </small> </div>
+                                </td>
+                                <td class="text-right d-md-block d-block">  <a href="" class="btn btn-light" data-abc="true"> Remove</a> </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <figure class="itemside align-items-center">
+                                        <div class="aside"><img src="assets/images/f2.png" class="img-sm"></div>
+                                        <figcaption class="info"> <a href="#" class="title text-dark" data-abc="true">Flower Formal T-shirt</a>
+                                            <p class="text-muted small">SIZE: L <br> Brand: ADDA </p>
+                                        </figcaption>
+                                    </figure>
+                                </td>
+                                <td> <select class="form-control">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                    </select> </td>
+                                <td>
+                                    <div class="price-wrap"> <var class="price">$15</var> <small class="text-muted"> $12 each </small> </div>
+                                </td>
+                                <td class="text-right d-md-block d-block">  <a href="" class="btn btn-light btn-round" data-abc="true"> Remove</a> </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <figure class="itemside align-items-center">
+                                        <div class="aside"><img src="assets/images/f3.png" class="img-sm"></div>
+                                        <figcaption class="info"> <a href="#" class="title text-dark" data-abc="true">Printed White Tshirt</a>
+                                            <p class="small text-muted">SIZE:M <br> Brand: Cantabil</p>
+                                        </figcaption>
+                                    </figure>
+                                </td>
+                                <td> <select class="form-control">
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                    </select> </td>
+                                <td>
+                                    <div class="price-wrap"> <var class="price">$9</var> <small class="text-muted"> $6 each</small> </div>
+                                </td>
+                                <td class="text-right d-md-block d-block">  <a href="" class="btn btn-light btn-round" data-abc="true"> Remove</a> </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-              </div>
-              <div class="mini-cart cart-list p-0 mt-3">
-                <div class="mini-cart-item d-flex border-bottom pb-3">
-                  <div class="col-lg-2 col-md-3 col-sm-2 me-4">
-                    <a href="#" title="product-image">
-                      <img src="assets/images/single-product-thumb2.jpg" class="img-fluid" alt="single-product-item">
-                    </a>
-                  </div>
-                  <div class="col-lg-9 col-md-8 col-sm-8">
-                    <div class="product-header d-flex justify-content-between align-items-center mb-3">
-                      <h4 class="product-title fs-6 me-5">Brand Shoes For Men</h4>
-                      <a href="" class="remove" aria-label="Remove this item" data-product_id="11913"
-                        data-cart_item_key="abc" data-product_sku="">
-                        <svg class="close">
-                          <use xlink:href="#close"></use>
-                        </svg>
-                      </a>
-                    </div>
-                    <div class="quantity-price d-flex justify-content-between align-items-center">
-                      <div class="input-group product-qty">
-                        <button type="button"
-                          class="quantity-left-minus btn btn-light rounded-0 rounded-start btn-number"
-                          data-type="minus">
-                          <svg width="16" height="16">
-                            <use xlink:href="#minus"></use>
-                          </svg>
-                        </button>
-                        <input type="text" name="quantity" class="form-control input-number quantity" value="1">
-                        <button type="button" class="quantity-right-plus btn btn-light rounded-0 rounded-end btn-number"
-                          data-type="plus">
-                          <svg width="16" height="16">
-                            <use xlink:href="#plus"></use>
-                          </svg>
-                        </button>
-                      </div>
-                      <div class="price-code">
-                        <span class="product-price fs-6">$99</span>
-                      </div>
-                    </div>
-                    <!-- quantity-price -->
-                  </div>
-                </div>
-              </div>
-              <!-- cart-list -->
-              <div class="mini-cart-total d-flex justify-content-between py-4">
-                <span class="fs-6">Subtotal:</span>
-                <span class="special-price-code">
-                  <span class="price-amount amount fs-6" style="opacity: 1;">
-                    <bdi>
-                      <span class="price-currency-symbol">$</span>198.00 </bdi>
-                  </span>
-                </span>
-              </div>
-              <div class="modal-footer my-4 justify-content-center">
-                <button type="button" class="btn btn-red hvr-sweep-to-right dark-sweep">View Cart</button>
-                <button type="button"
-                  class="btn btn-outline-gray hvr-sweep-to-right dark-sweep">Checkout</button>
-              </div>
             </div>
-          </div>
-        </div>
-      </div>
+        </aside>
+        <aside class="col-lg-3">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <form>
+                        <div class="form-group"> <label>Have coupon?</label>
+                            <div class="input-group"> <input type="text" class="form-control coupon" name="" placeholder="Coupon code"> <span class="input-group-append"> <button class="btn btn-primary btn-apply coupon">Apply</button> </span> </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <dl class="dlist-align">
+                        <dt>Total price:</dt>
+                        <dd class="text-right ml-3">$69.97</dd>
+                    </dl>
+                    <dl class="dlist-align">
+                        <dt>Discount:</dt>
+                        <dd class="text-right text-danger ml-3">- $10.00</dd>
+                    </dl>
+                    <dl class="dlist-align">
+                        <dt>Total:</dt>
+                        <dd class="text-right text-dark b ml-3"><strong>$59.97</strong></dd>
+                    </dl>
+                    <hr> <a href="#" class="btn btn-out btn-primary btn-square btn-main" data-abc="true"> Make Purchase </a> <a href="#" class="btn btn-out btn-success btn-square btn-main mt-2" data-abc="true">Continue Shopping</a>
+                </div>
+            </div>
+        </aside>
     </div>
-  </div>
-  <!-- cart view end --> 
+ </div>
+</div>
+
+<!-- Real template photos => https://i.imgur.com/1eq5kmC.png => https://i.imgur.com/hqiAldf.jpg => https://i.imgur.com/UwvU0cT.jpg -->
