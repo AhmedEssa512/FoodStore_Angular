@@ -9,5 +9,7 @@ import { IFood } from '../../Models/IFood';
   styleUrl: './food.component.css'
 })
 export class FoodComponent {
-  @Input() food: IFood | undefined;
+  @Input() food: any | undefined;
+
+  // port:string = "";
 }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { OfferComponent } from "../offer/offer.component";
 import { MenuComponent } from "../menu/menu.component";
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-home',
