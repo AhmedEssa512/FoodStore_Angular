@@ -21,8 +21,8 @@ export class LoginComponent {
   ngOnInit(): void {
 
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required]
+      email: ['', [Validators.required, Validators.email , Validators.pattern(/^[a-zA-Z0-9._%+-]+@(gmail\.com|yahoo\.com|hotmail\.com|outlook\.com)$/)]],
+      password: ['', [Validators.required , Validators.minLength(5), Validators.maxLength(20)]]
     });
   }
 
@@ -46,6 +46,12 @@ export class LoginComponent {
       console.log('Form is invalid');
       this.loginForm.markAllAsTouched(); // highlight all invalid fields
     }
+  }
+
+
+  logOut()
+  {
+    this._authService.logout();
   }
   
 

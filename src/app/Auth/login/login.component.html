@@ -25,7 +25,16 @@
             placeholder="Password"
           />
           <div *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched" class="text-danger mt-1">
-            <small>Password is required.</small>
+
+            <small *ngIf="loginForm.get('password')?.errors?.['required']">
+              Password is required.
+            </small>
+            <small *ngIf="loginForm.get('password')?.errors?.['minlength']">
+              Password must be at least 5 characters.
+            </small>
+            <small *ngIf="loginForm.get('password')?.errors?.['maxlength']">
+              Password must be no more than 20 characters.
+            </small>
           </div>
         </div>
   
