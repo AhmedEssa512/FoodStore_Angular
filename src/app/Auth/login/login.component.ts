@@ -15,6 +15,7 @@ import { ILoginRequest } from '../../Models/ILoginRequest';
 export class LoginComponent {
 
   loginForm!: FormGroup;
+  errorMessage = '';
 
   constructor(private fb: FormBuilder, private _authService:AuthService,private router: Router) {}
 
@@ -33,17 +34,15 @@ export class LoginComponent {
   
       this._authService.login(loginData).subscribe({
         next: (response) => {
-          console.log('Login successful:', response);
-  
-          this.router.navigate(['/home']); // or any route
+          this.errorMessage = '';
+          this.router.navigate(['/home']); 
         },
-        error: (error) => {
-          console.error('Login failed:', error);
-          // Show an error message to the user (optional)
+        error: (err) => {
+          this.errorMessage = err.error?.message || 'An unexpected error occurred.';
         }
       });
     } else {
-      console.log('Form is invalid');
+
       this.loginForm.markAllAsTouched(); // highlight all invalid fields
     }
   }

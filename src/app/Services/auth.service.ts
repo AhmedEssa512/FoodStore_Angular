@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { ILoginRequest } from '../Models/ILoginRequest';
 import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { IAuthRespone } from '../Models/IAuthRespone';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -10,60 +11,63 @@ import { IAuthRespone } from '../Models/IAuthRespone';
 export class AuthService {
 
   private apiUrl = 'https://localhost:7268/api/Auth';
-  private tokenKey = 'auth_token';
+  
+  private accessToken: string | null = null;
 
+  // BehaviorSubject tracks login status
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
-  constructor(private _http:HttpClient) { }
+  constructor(private _http: HttpClient, private router: Router) {}
 
-
-  login(loginRequest:ILoginRequest): Observable<IAuthRespone> {
+  login(loginRequest: ILoginRequest): Observable<IAuthRespone> {
     return this._http.post<IAuthRespone>(`${this.apiUrl}/login`, loginRequest).pipe(
       tap((res) => {
         this.storeToken(res.token);
         this.isLoggedInSubject.next(true);
       }),
-
       catchError((error) => {
-      console.error('Login failed:', error);
-      return throwError(() => error); // rethrow to the component for further handling
-    })
+        console.error('Login failed:', error);
+        return throwError(() => error);
+      })
+    );
+  }
 
-
-    ); 
+  refreshToken(): Observable<IAuthRespone> {
+    return this._http.post<IAuthRespone>(`${this.apiUrl}/refresh-token`, {}).pipe(
+      tap((res) => {
+        this.storeToken(res.token); 
+      }),
+      catchError((error) => {
+        this.logout(); 
+        return throwError(() => error);
+      })
+    );
   }
 
   logout(): void {
-    this.clearStorage();
-    this.isLoggedInSubject.next(false);
-  }
-
-  private isBrowser(): boolean {
-    return typeof window !== 'undefined';
-  }
-
-  private clearStorage(): void {
-    if (this.isBrowser()) {
-      localStorage.removeItem(this.tokenKey);
-    }
+    this._http.post(`${this.apiUrl}/revoke-token`, {}).pipe(
+      catchError(() => []) // if the request fails return an empty observable
+    ).subscribe(() => {
+      this.clearToken();
+      this.isLoggedInSubject.next(false); 
+    });
   }
 
   getToken(): string | null {
-    if (this.isBrowser()) {
-      return localStorage.getItem(this.tokenKey);
-    }
-    return null;
+    return this.accessToken;
   }
 
-  private storeToken(token: string): void {
-    if (this.isBrowser()) {
-      localStorage.setItem(this.tokenKey, token);
-    }
+   storeToken(token: string): void {
+    this.accessToken = token;
+  }
+
+  private clearToken(): void {
+    this.accessToken = null;
   }
 
   private hasToken(): boolean {
-    return this.isBrowser() && !!localStorage.getItem(this.tokenKey);
+    return !!this.accessToken;
   }
 
 
