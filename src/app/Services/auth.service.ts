@@ -14,6 +14,8 @@ export class AuthService {
   
   private accessToken: string | null = null;
 
+  private redirectUrl: string | null = null;
+
   // BehaviorSubject tracks login status
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
@@ -68,6 +70,18 @@ export class AuthService {
 
   private hasToken(): boolean {
     return !!this.accessToken;
+  }
+
+  setRedirectUrl(url: string) {
+    this.redirectUrl = url;
+  }
+
+  getRedirectUrl(): string | null {
+    return this.redirectUrl;
+  }
+
+  clearRedirectUrl() {
+    this.redirectUrl = null;
   }
 
 

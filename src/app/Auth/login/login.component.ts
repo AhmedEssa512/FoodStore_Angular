@@ -35,7 +35,16 @@ export class LoginComponent {
       this._authService.login(loginData).subscribe({
         next: (response) => {
           this.errorMessage = '';
+        //  Get redirect URL from AuthService or fallback
+        const returnUrl = this._authService.getRedirectUrl() || '/';
+        this._authService.clearRedirectUrl();
+
+        // ✅ Prevent open redirect vulnerability
+        if (returnUrl.startsWith('/') && !returnUrl.startsWith('//')) {
+          this.router.navigateByUrl(returnUrl);
+        } else {
           this.router.navigate(['/home']); 
+        } 
         },
         error: (err) => {
           this.errorMessage = err.error?.message || 'An unexpected error occurred.';
