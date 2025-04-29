@@ -9,6 +9,7 @@ import { FoodComponent } from "./Components/food/food.component";
 import { CartComponent } from "./Components/cart/cart.component";
 import { HomeComponent } from "./Components/home/home.component";
 import { HttpClientModule } from '@angular/common/http';
+import { AuthService } from './Services/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -19,4 +20,10 @@ import { HttpClientModule } from '@angular/common/http';
 })
 export class AppComponent {
   title = 'FoodStore';
+
+  constructor(private authService: AuthService) {}
+
+  // ngOnInit(): void {
+  //   this.authService.checkAuthStatus().subscribe();
+  // }
 }

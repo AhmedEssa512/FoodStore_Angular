@@ -2,7 +2,8 @@ export interface IFood
 {
     id:string;
     name:string;
-    photo:string;
+    imageUrl:string;
     description:string;
     price: number;
+    categoryId: number;
 }

@@ -1,6 +1,6 @@
 <div class="test">
  <div class="container">
-    <div class="row">
+    <div class="row" *ngIf="cart && !loading; else loadingOrError">
         <aside class="col-lg-9">
             <div class="card">
                 <div class="table-responsive">
@@ -14,64 +14,33 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr *ngFor="let item of cart!.items" >
                                 <td>
                                     <figure class="itemside align-items-center">
-                                        <div class="aside"><img src="assets/images/f1.png" class="img-sm"></div>
-                                        <figcaption class="info"> <a href="#" class="title text-dark" data-abc="true">Tshirt with round nect</a>
-                                            <p class="text-muted small">SIZE: L <br> Brand: MAXTRA</p>
+                                        <div class="aside"><img src="https://localhost:7268/{{ item.food.imageUrl }}" [alt]="item.food.name" class="img-sm"></div>
+                                        <figcaption class="info">
+                                            <a href="#" class="title text-dark" data-abc="true">{{ item.food.name }}</a>
+                                            <p class="text-muted small">{{ item.food.description }}</p>
                                         </figcaption>
                                     </figure>
                                 </td>
-                                <td> <select class="form-control">
+                                <td>
+                                    <select class="form-control">
                                         <option>1</option>
                                         <option>2</option>
                                         <option>3</option>
                                         <option>4</option>
-                                    </select> </td>
-                                <td>
-                                    <div class="price-wrap"> <var class="price">$10.00</var> <small class="text-muted"> $9.20 each </small> </div>
+                                    </select>
                                 </td>
-                                <td class="text-right d-md-block d-block">  <a href="" class="btn btn-light" data-abc="true"> Remove</a> </td>
-                            </tr>
-                            <tr>
                                 <td>
-                                    <figure class="itemside align-items-center">
-                                        <div class="aside"><img src="assets/images/f2.png" class="img-sm"></div>
-                                        <figcaption class="info"> <a href="#" class="title text-dark" data-abc="true">Flower Formal T-shirt</a>
-                                            <p class="text-muted small">SIZE: L <br> Brand: ADDA </p>
-                                        </figcaption>
-                                    </figure>
+                                    <div class="price-wrap">
+                                        <var class="price">${{ item.price * item.quantity }}</var>
+                                        <small class="text-muted">${{ item.price }} each</small> 
+                                    </div>
                                 </td>
-                                <td> <select class="form-control">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                    </select> </td>
-                                <td>
-                                    <div class="price-wrap"> <var class="price">$15</var> <small class="text-muted"> $12 each </small> </div>
+                                <td class="text-right d-md-block d-block">
+                                    <button (click)="removeItem(item.id)" class="btn btn-light">Remove</button>
                                 </td>
-                                <td class="text-right d-md-block d-block">  <a href="" class="btn btn-light btn-round" data-abc="true"> Remove</a> </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <figure class="itemside align-items-center">
-                                        <div class="aside"><img src="assets/images/f3.png" class="img-sm"></div>
-                                        <figcaption class="info"> <a href="#" class="title text-dark" data-abc="true">Printed White Tshirt</a>
-                                            <p class="small text-muted">SIZE:M <br> Brand: Cantabil</p>
-                                        </figcaption>
-                                    </figure>
-                                </td>
-                                <td> <select class="form-control">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                    </select> </td>
-                                <td>
-                                    <div class="price-wrap"> <var class="price">$9</var> <small class="text-muted"> $6 each</small> </div>
-                                </td>
-                                <td class="text-right d-md-block d-block">  <a href="" class="btn btn-light btn-round" data-abc="true"> Remove</a> </td>
                             </tr>
                         </tbody>
                     </table>
@@ -92,7 +61,7 @@
                 <div class="card-body">
                     <dl class="dlist-align">
                         <dt>Total price:</dt>
-                        <dd class="text-right ml-3">$69.97</dd>
+                        <dd class="text-right ml-3">${{ getTotal() }}</dd>
                     </dl>
                     <dl class="dlist-align">
                         <dt>Discount:</dt>
@@ -100,7 +69,9 @@
                     </dl>
                     <dl class="dlist-align">
                         <dt>Total:</dt>
-                        <dd class="text-right text-dark b ml-3"><strong>$59.97</strong></dd>
+                        <dd class="text-right text-dark b ml-3">
+                            <strong>${{ getTotal() }}</strong>
+                        </dd>
                     </dl>
                     <hr> <a href="#" class="btn btn-out btn-primary btn-square btn-main" data-abc="true"> Make Purchase </a> <a href="#" class="btn btn-out btn-success btn-square btn-main mt-2" data-abc="true">Continue Shopping</a>
                 </div>
@@ -109,5 +80,12 @@
     </div>
  </div>
 </div>
+
+<ng-template #loadingOrError>
+    <div class="container text-center mt-5">
+      <div *ngIf="loading">Loading your cart...</div>
+      <div *ngIf="!loading && errorMessage" class="text-danger">{{ errorMessage }}</div>
+    </div>
+</ng-template>
 
 <!-- Real template photos => https://i.imgur.com/1eq5kmC.png => https://i.imgur.com/hqiAldf.jpg => https://i.imgur.com/UwvU0cT.jpg -->
