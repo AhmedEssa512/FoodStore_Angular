@@ -31,15 +31,23 @@ export class CartComponent {
         this.loading = false;
       },
       error: (error) => {
-        this.errorMessage = error.message;
+        // this.errorMessage = error.message;
         this.cart = null;
         this.loading = false;
       }
     });
   }
 
+  deleteItem(item: ICartItem): void {
+    this.loading = true;
+    const id = item.id > 0 ? item.id : item.foodId; // Use foodId for guest
+    this._cartService.deleteCartItem(id,() =>{
+      this.loadCart();
+    });
+  }
+
   getTotal(): number {
-    return this.cart?.items.reduce((sum, item) => sum + item.price * item.quantity, 0) || 0;
+    return this.cart?.items.reduce((sum, item) => sum + item.food.price * item.quantity, 0) || 0;
   }
 
   updateQuantity(item: ICartItem, quantity: number) {

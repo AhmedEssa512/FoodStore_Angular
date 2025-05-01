@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { AuthService } from '../../Services/auth.service';
 import { Router , ActivatedRoute } from '@angular/router';
 import { ILoginRequest } from '../../Models/ILoginRequest';
+import { CartService } from '../../Services/cart.service';
 
 @Component({
   selector: 'app-login',
@@ -18,7 +19,7 @@ export class LoginComponent {
   errorMessage = '';
   returnUrl: string = '/'; // default to home
 
-  constructor(private fb: FormBuilder, private _authService:AuthService,private router: Router, private route:ActivatedRoute) {}
+  constructor(private fb: FormBuilder, private _authService:AuthService,private _cartService:CartService,private router: Router, private route:ActivatedRoute) {}
 
   ngOnInit(): void {
 
@@ -39,7 +40,7 @@ export class LoginComponent {
         next: (response) => {
           
           this.errorMessage = '';
-  
+          this._cartService.mergeGuestCartToBackend();
           if (this.returnUrl?.startsWith('/')) {
             this.router.navigateByUrl(this.returnUrl);
           } else {

@@ -26,7 +26,7 @@
                                 </td>
                                 <td>
                                     <select class="form-control">
-                                        <option>1</option>
+                                        <option>{{ item.quantity }}</option>
                                         <option>2</option>
                                         <option>3</option>
                                         <option>4</option>
@@ -34,12 +34,12 @@
                                 </td>
                                 <td>
                                     <div class="price-wrap">
-                                        <var class="price">${{ item.price * item.quantity }}</var>
+                                        <var class="price">${{ item.food.price * item.quantity }}</var>
                                         <small class="text-muted">${{ item.price }} each</small> 
                                     </div>
                                 </td>
                                 <td class="text-right d-md-block d-block">
-                                    <button (click)="removeItem(item.id)" class="btn btn-light">Remove</button>
+                                    <button (click)="deleteItem(item)" class="btn btn-light">Delete</button>
                                 </td>
                             </tr>
                         </tbody>
