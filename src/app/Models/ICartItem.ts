@@ -5,7 +5,6 @@ export interface ICartItem
   id: number;
   quantity: number;
   price: number;
-  cartId: number;
-  foodId: number;
+  // cartId: number;
   food: IFood;
 }

@@ -25,11 +25,8 @@
                                     </figure>
                                 </td>
                                 <td>
-                                    <select class="form-control">
-                                        <option>{{ item.quantity }}</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
+                                    <select class="form-control" [ngModel]="item.quantity" (ngModelChange)="onQuantityChange(item, $event)">
+                                        <option *ngFor="let qty of [1,2,3,4,5]" [value]="qty">{{ qty }}</option>
                                     </select>
                                 </td>
                                 <td>

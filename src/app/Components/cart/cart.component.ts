@@ -3,11 +3,13 @@ import { ICart } from '../../Models/ICart';
 import { CartService } from '../../Services/cart.service';
 import { CommonModule } from '@angular/common';
 import { ICartItem } from '../../Models/ICartItem';
+import { FormsModule } from '@angular/forms';
+import { error } from 'console';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [CommonModule],
+  imports: [FormsModule,CommonModule],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.css'
 })
@@ -31,34 +33,58 @@ export class CartComponent {
         this.loading = false;
       },
       error: (error) => {
-        // this.errorMessage = error.message;
+        console.log(error);
         this.cart = null;
         this.loading = false;
       }
     });
   }
 
+
   deleteItem(item: ICartItem): void {
-    this.loading = true;
-    const id = item.id > 0 ? item.id : item.foodId; // Use foodId for guest
-    this._cartService.deleteCartItem(id,() =>{
-      this.loadCart();
-    });
+    const id = item.id <= 0 ? item.food.id : item.id ;
+    this._cartService.deleteCartItem(id).subscribe({
+    next: () => {
+      console.log('Item successfully deleted');
+      if(this.cart)
+        {
+          this.cart.items = this.cart.items.filter(i => i.food.id !== item.food.id);
+        }
+    },
+    error: (err) => {
+      console.error('Error deleting item:', err);
+    }
+  });
   }
+
+  onQuantityChange(item: ICartItem, newQuantity: number): void {
+
+    const qty = +newQuantity;
+    if (item.quantity === qty) return;
+  
+    item.quantity = qty;
+  
+    this._cartService.updateCartItem(item).subscribe({
+      next: () => {
+
+        if(this.cart)
+        {
+          this.cart.items.find(i => i.food.id === item.food.id)!.quantity = newQuantity;
+        }
+
+      },
+      error: (err) => {
+        console.error('Error updating item:', err);
+      }
+    });
+
+  }
+
 
   getTotal(): number {
     return this.cart?.items.reduce((sum, item) => sum + item.food.price * item.quantity, 0) || 0;
   }
 
-  updateQuantity(item: ICartItem, quantity: number) {
-    item.quantity = quantity;
-    //  API call to update quantity in backend
-  }
-
-  removeItem(itemId: number) {
-    this.cart!.items = this.cart!.items.filter(item => item.id !== itemId);
-    //  API call to remove from backend
-  }
-
+ 
   
 }

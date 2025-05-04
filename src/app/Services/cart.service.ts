@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { HttpErrorHandlerService } from './http-error-handler.service';
-import { catchError, map, Observable, of, retry, switchMap, throwError } from 'rxjs';
+import { catchError, map, Observable, of, retry, switchMap, tap, throwError } from 'rxjs';
 import { ICart } from '../Models/ICart';
 import { ICartItem } from '../Models/ICartItem';
 import { AuthService } from './auth.service';
@@ -67,7 +67,7 @@ export class CartService {
             })
           );
         } else {
-          // Other errors (network, server, etc.)
+         
           console.error('Failed to get cart:', err);
           return throwError(() => err);
         }
@@ -130,32 +130,69 @@ export class CartService {
     });
   }
 
-  deleteCartItem(cartItemIdOrFoodId: number,onSuccess?: () => void): void {
-    this.authService.checkAuthStatus().subscribe({
-      next: () => {
+
+  deleteCartItem(CartItemIdOrFoodId: number): Observable<void> {
+    return this.authService.checkAuthStatus().pipe(
+      switchMap(() => {
         // User is authenticated, delete from backend by CartItem ID
-        this.http.delete(`${this.apiUrl}/items/${cartItemIdOrFoodId}`).subscribe({
-          next: () => {
-            console.log('Item deleted from backend cart')
-            onSuccess?.();
-          },
-          
-          error: (err) => console.error('Failed to delete item from backend cart', err)
-        });
-      },
-      error: (err) => {
+        return this.http.delete<void>(`${this.apiUrl}/items/${CartItemIdOrFoodId}`).pipe(
+          tap(() => console.log('Item deleted from backend cart')),
+          catchError((err) => {
+            console.error('Failed to delete item from backend cart', err);
+            return throwError(() => err);
+          })
+        );
+      }),
+      catchError((err) => {
         if (err.status === 401) {
           // Guest user: delete from localStorage by foodId
-          const cart = this.getCartFromLocalStorage(); // [{ foodId, quantity }]
-          const updatedCart = cart.filter(item => item.foodId !== cartItemIdOrFoodId);
+          const cart = this.getCartFromLocalStorage(); 
+
+          const updatedCart = cart.filter(item => item.foodId !== CartItemIdOrFoodId);
+
           localStorage.setItem(this.cartKey, JSON.stringify(updatedCart));
+
           console.log('Item deleted from localStorage cart');
-          onSuccess?.();
+          return of(undefined); // Return empty observable on success for guest user
         } else {
           console.error('Error checking auth status:', err);
+          return throwError(() => err);
         }
-      }
-    });
+      })
+    );
+  }
+
+
+  updateCartItem(cartItem: ICartItem): Observable<void> {
+    return this.authService.checkAuthStatus().pipe(
+      switchMap(() => {
+        
+        return this.http.patch<void>(`${this.apiUrl}/items/${cartItem.id}`, cartItem.quantity).pipe(
+          tap(() => console.log('Item updated in backend cart')),
+          catchError((err) => {
+            console.error('Failed to update item in backend cart', err);
+            return throwError(() => err);
+          })
+        );
+      }),
+      catchError((err) => {
+        if (err.status === 401) {
+         
+          const cart = this.getCartFromLocalStorage();
+          const index = cart.findIndex(item => item.foodId === cartItem.food.id);
+  
+          if (index > -1) {
+            cart[index].quantity = cartItem.quantity;
+            localStorage.setItem(this.cartKey, JSON.stringify(cart));
+            console.log('Item updated in localStorage cart');
+          }
+          return of(undefined); // Return empty observable on success for guest user
+        } else {
+          console.error('Error checking auth status:', err);
+          return throwError(() => err);
+        }
+      })
+    );
   }
   
   
