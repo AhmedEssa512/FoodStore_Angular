@@ -72,7 +72,7 @@ export class AuthService {
 
   logout():void {
     this._http.post(`${this.apiUrl}/revoke-token`,{}).pipe(
-      catchError((res) => of(null))    // Don't throw error if logout fails
+      catchError((res) => of(null))   
     ).subscribe((res) => {
       this.isLoggedInSubject.next(false);
       // this.router.navigate(['/login']);

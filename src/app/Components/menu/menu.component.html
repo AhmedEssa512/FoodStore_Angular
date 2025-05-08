@@ -8,12 +8,20 @@
       </div>
 
       <ul class="filters_menu">
-        <li class="active" data-filter="*">All</li>
-        <li data-filter=".burger">Burger</li>
-        <li data-filter=".pizza">Pizza</li>
-        <li data-filter=".pasta">Pasta</li>
-        <li data-filter=".fries">Fries</li>
-      </ul>
+        <li
+          [class.active]="selectedCategoryId === null"
+          (click)="filterFoodsByCategory(null)"
+        >
+          All
+        </li>
+        <li
+          *ngFor="let category of categories"
+          [class.active]="selectedCategoryId === category.id"
+          (click)="filterFoodsByCategory(category.id)"
+        >
+          {{ category.name }}
+        </li>
+      </ul>    
 
       <div class="filters-content">
         <div class="row grid">

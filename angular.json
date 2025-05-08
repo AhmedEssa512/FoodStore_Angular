@@ -29,7 +29,8 @@
               "src/assets/css/bootstrap.css",     
               "src/assets/css/font-awesome.min.css", 
               "src/assets/css/style.css",           
-              "src/assets/css/responsive.css"      
+              "src/assets/css/responsive.css",
+              "node_modules/ngx-spinner/animations/square-jelly-box.css"      
             ],
             "scripts": [
               "src/assets/js/bootstrap.js",

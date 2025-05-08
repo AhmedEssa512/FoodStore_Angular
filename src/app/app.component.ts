@@ -10,20 +10,24 @@ import { CartComponent } from "./Components/cart/cart.component";
 import { HomeComponent } from "./Components/home/home.component";
 import { HttpClientModule } from '@angular/common/http';
 import { AuthService } from './Services/auth.service';
+import { NgxSpinnerModule } from 'ngx-spinner';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterModule],
+  imports: [
+    RouterOutlet,
+    RouterModule,
+    NgxSpinnerModule
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
   title = 'FoodStore';
 
-  constructor(private authService: AuthService) {}
+  constructor() {}
 
-  // ngOnInit(): void {
-  //   this.authService.checkAuthStatus().subscribe();
-  // }
+
 }

@@ -4,6 +4,8 @@ import { FoodComponent } from "../food/food.component";
 import { CommonModule } from '@angular/common';
 import { FoodService } from '../../Services/food.service';
 import { HttpClientModule } from '@angular/common/http';
+import { CategoryService } from '../../Services/category.service';
+import { ICategory } from '../../Models/ICategory';
 
 @Component({
   selector: 'app-menu',
@@ -15,93 +17,56 @@ import { HttpClientModule } from '@angular/common/http';
 export class MenuComponent implements OnInit {
 
 
-    foodList:any[] = [];
+    foodList: IFood[] = [];
+    categories: ICategory[] = [];
+    errorMessage = '';
+    selectedCategoryId: number | null = null;
+    currentPage: number = 1;
+    pageSize: number = 10;
 
-    constructor(private _service:FoodService) {}
-
-    // ngOnInit(): void {
-    //   this._service.getFoods().subscribe((data)=>{
-    //     this.foodList = data;
-    //     console.log(data);
-    //   });
-    // }
+    constructor(private _foodService :FoodService, private _categoryService :CategoryService ) {}
 
     ngOnInit(): void {
-      this._service.getFoods().subscribe(
-        (data) => {
-          this.foodList = data;
-          console.log('Data received:', data);
-        },
-        (error) => {
-          console.error('Failed to fetch data:', error);
-        }
-      );
+      this.loadFoods();
+      this.loadCategories();
     }
+  
+    private loadFoods(): void {
+      this._foodService.getFoods({
+        categoryId: this.selectedCategoryId ?? undefined,
+        pageNumber: this.currentPage,
+        pageSize: this.pageSize
+      }).subscribe({
+        next: (data) => {
+          this.foodList = data;
+          console.log('Foods:', data);
+        },
+        error: (err) => {
+          this.errorMessage = 'Failed to load foods';
+          console.error(err);
+        }
+      });
+    }
+  
+    private loadCategories(): void {
+      this._categoryService.getCategories().subscribe({
+        next: (data) => {
+          this.categories = data;
+          console.log('Categories:', data);
+        },
+        error: (err) => {
+          this.errorMessage = 'Failed to load categories';
+          console.error(err);
+        }
+      });
+    }
+
+    filterFoodsByCategory(categoryId: number | null): void {
+      this.selectedCategoryId = categoryId;
+      this.currentPage = 1; // Reset to first page on filter
+      this.loadFoods();
+    }
+  
 }
 
-    // foodList:IFood[] = [
-    //   {
-    //     id: '1',
-    //     name: 'Pizza',
-    //     photo: 'assets/images/f1.png', 
-    //     description: 'Classic pizza with tomato sauce, mozzarella, and fresh basil.',
-    //     price: 20
-    //   },
-    //   {
-    //     id: '2',
-    //     name: 'burger',
-    //     photo: 'assets/images/f2.png', 
-    //     description: 'Classic pizza with tomato sauce, mozzarella, and fresh basil.',
-    //     price: 30
-    //   },
-    //   {
-    //     id: '3',
-    //     name: 'pasta',
-    //     photo: 'assets/images/f3.png', 
-    //     description: 'Classic pizza with tomato sauce, mozzarella, and fresh basil.',
-    //     price: 22
-    //   },
-    //   {
-    //     id: '4',
-    //     name: 'fries',
-    //     photo: 'assets/images/f4.png', 
-    //     description: 'Classic pizza with tomato sauce, mozzarella, and fresh basil.',
-    //     price: 25
-    //   },
-    //   {
-    //     id: '5',
-    //     name: 'Margherita Pizza',
-    //     photo: 'assets/images/f5.png', 
-    //     description: 'Classic pizza with tomato sauce, mozzarella, and fresh basil.',
-    //     price: 36
-    //   },
-    //   {
-    //     id: '6',
-    //     name: 'Margherita Pizza',
-    //     photo: 'assets/images/f6.png', 
-    //     description: 'Classic pizza with tomato sauce, mozzarella, and fresh basil.',
-    //     price: 40
-    //   },
-    //   {
-    //     id: '7',
-    //     name: 'Margherita Pizza',
-    //     photo: 'assets/images/f7.png', 
-    //     description: 'Classic pizza with tomato sauce, mozzarella, and fresh basil.',
-    //     price: 50
-    //   },
-    //   {
-    //     id: '8',
-    //     name: 'Margherita Pizza',
-    //     photo: 'assets/images/f8.png', 
-    //     description: 'Classic pizza with tomato sauce, mozzarella, and fresh basil.',
-    //     price: 35
-    //   },
-    //   {
-    //     id: '9',
-    //     name: 'Margherita Pizza',
-    //     photo: 'assets/images/f9.png', 
-    //     description: 'Classic pizza with tomato sauce, mozzarella, and fresh basil.',
-    //     price: 25
-    //   }
-    // ];
 

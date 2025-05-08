@@ -1,0 +1,8 @@
+.description{
+    overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3; /* Limit to 3 lines */
+  -webkit-box-orient: vertical;
+  min-height: 4.5em; /* Ensures consistent space even if fewer lines */
+}
