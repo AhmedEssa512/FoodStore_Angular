@@ -1,23 +1,15 @@
 import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
-import { Observable, BehaviorSubject, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 
 import {
-  HttpRequest,
-  HttpHandlerFn,
   HttpInterceptorFn,
-  HttpEvent,
   HttpErrorResponse,
-  HttpClient,
 } from '@angular/common/http';
 
 import {
   catchError,
   switchMap,
-  filter,
-  take,
-  tap,
-  finalize,
 } from 'rxjs/operators';
 
 
@@ -31,7 +23,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
     catchError((error: HttpErrorResponse) => {
       // Skip refresh on login or auth endpoints
       const isAuthRequest = req.url.includes('/login') || req.url.includes('/register') || req.url.includes('/refresh-token');
-      if (error.status === 401 && !isAuthRequest) {
+      if (error.status === 401 && !isAuthRequest && authService.isLoggedIn()) {
         
         return authService.refreshToken().pipe(
           switchMap(() => {

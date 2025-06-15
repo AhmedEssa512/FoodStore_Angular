@@ -3,10 +3,10 @@ import { Injectable } from '@angular/core';
 import { catchError, map, Observable, of, retry, switchMap, tap, throwError } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { HttpErrorHandlerService } from '../../../core/services/http-error-handler.service';
-import { IFood } from '../../home/models/IFood';
-import { ICartItem } from '../models/ICartItem';
-import { ICartRequest } from '../models/ICartRequest';
-import { ICart } from '../models/ICart';
+import { Food } from '../../home/models/Food';
+import { CartItem } from '../models/CartItem';
+import { CartRequest } from '../models/CartRequest';
+import { Cart } from '../models/Cart';
 
 
 @Injectable({
@@ -14,7 +14,7 @@ import { ICart } from '../models/ICart';
 })
 export class CartService {
   private readonly apiUrl = 'https://localhost:7268/api/Cart';
-  private readonly foodIdsUrl = 'https://localhost:7268/api/Food/getFoodByIds';
+  private readonly foodIdsUrl = 'https://localhost:7268/api/Food';
   private cartKey = 'guest_cart';
 
   constructor(
@@ -24,63 +24,56 @@ export class CartService {
     
   ) { }
 
-  getCart(): Observable<ICart> {
-    return this.authService.checkAuthStatus().pipe(
-      switchMap(() => {
-        
-        return this.http.get<ICart>(`${this.apiUrl}/items`);
-      }),
-      catchError((err) => {
-        if (err.status === 401) {
-          // Guest user — fallback to localStorage
-          const localItems = this.getCartFromLocalStorage(); 
-          const foodIds = localItems.map(i => i.foodId);
-  
-          if (foodIds.length === 0) {
-            return of({ id: 0, userId: '', items: [], total: 0 });
-          }
-  
-          return this.http.post<IFood[]>(`${this.foodIdsUrl}`, foodIds).pipe(
-            map((foods) => {
-              const items: ICartItem[] = foods.map(food => {
-                const matching = localItems.find(i => i.foodId === food.id);
-                const quantity = matching?.quantity ?? 1;
-                return {
-                  id: 0,
-                  quantity,
-                  price: food.price * quantity,
-                  cartId: 0,
-                  foodId: food.id,
-                  food
-                };
-              });
-  
-              const total = items.reduce((sum, item) => sum + item.price, 0);
-  
-              const cart: ICart = {
-                id: 0,
-                userId: '',
-                items,
-                total
-              };
-  
-              return cart;
-            })
-          );
-        } else {
-         
-          console.error('Failed to get cart:', err);
-          return throwError(() => err);
-        }
-      })
-    );
+  getCartForAuthenticatedUser(): Observable<Cart> {
+  return this.http.get<Cart>(`${this.apiUrl}/items`, { withCredentials: true }).pipe(
+    catchError(err => this.errorHandler.handleError(err))
+  );
+}
+
+getCartForGuestUser(): Observable<Cart> {
+  const localItems = this.getCartFromLocalStorage();
+  const foodIds = localItems.map(i => i.foodId);
+
+  if (foodIds.length === 0) {
+    return of({ id: 0, userId: '', items: [], total: 0 });
   }
+
+  return this.http.post<Food[]>(`${this.foodIdsUrl}/batch`, foodIds).pipe(
+    map((foods) => {
+      const items: CartItem[] = foods.map(food => {
+        const matching = localItems.find(i => i.foodId === food.id);
+        const quantity = matching?.quantity ?? 1;
+        return {
+          id: 0,
+          quantity,
+          price: food.price * quantity,
+          cartId: 0,
+          foodId: food.id,
+          food
+        };
+      });
+
+      const total = items.reduce((sum, item) => sum + item.price, 0);
+
+      return {
+        id: 0,
+        userId: '',
+        items,
+        total
+      };
+    }),
+    catchError(err => this.errorHandler.handleError(err))
+  );
+}
+
+
+
   
   private getCartFromLocalStorage(): { foodId: number, quantity: number }[] {
     return JSON.parse(localStorage.getItem(this.cartKey) || '[]');
   }
 
-  addToCart(item: ICartRequest): void {
+  addToCart(item: CartRequest): void {
     this.authService.checkAuthStatus().subscribe({
       next: () => {
 
@@ -102,10 +95,10 @@ export class CartService {
     });
   }
   
-  private addToLocalCart(item: ICartRequest): void {
+  private addToLocalCart(item: CartRequest): void {
     const cart = JSON.parse(localStorage.getItem(this.cartKey) || '[]');
   
-    const existingItem = cart.find((i: ICartRequest) => i.foodId === item.foodId);
+    const existingItem = cart.find((i: CartRequest) => i.foodId === item.foodId);
     if (existingItem) {
       existingItem.quantity += item.quantity;
     } else {
@@ -164,7 +157,7 @@ export class CartService {
   }
 
 
-  updateCartItem(cartItem: ICartItem): Observable<void> {
+  updateCartItem(cartItem: CartItem): Observable<void> {
     return this.authService.checkAuthStatus().pipe(
       switchMap(() => {
         

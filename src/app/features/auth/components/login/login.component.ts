@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router , ActivatedRoute } from '@angular/router';
-import { ILoginRequest } from '../../models/ILoginRequest';
+import { LoginRequest } from '../../models/LoginRequest';
 import { CartService } from '../../../cart/services/cart.service';
 import { AuthService } from '../../../../core/services/auth.service';
 
@@ -14,7 +14,7 @@ import { AuthService } from '../../../../core/services/auth.service';
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
 
   loginForm!: FormGroup;
   errorMessage = '';
@@ -35,7 +35,7 @@ export class LoginComponent {
 
   onSubmit() {
     if (this.loginForm.valid) {
-      const loginData: ILoginRequest = this.loginForm.value;
+      const loginData: LoginRequest = this.loginForm.value;
   
       this._authService.login(loginData).subscribe({
         next: (response) => {

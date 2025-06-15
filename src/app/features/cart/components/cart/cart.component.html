@@ -70,7 +70,21 @@
                             <strong>${{ getTotal() }}</strong>
                         </dd>
                     </dl>
-                    <hr> <a href="#" class="btn btn-out btn-primary btn-square btn-main" data-abc="true"> Make Purchase </a> <a href="#" class="btn btn-out btn-success btn-square btn-main mt-2" data-abc="true">Continue Shopping</a>
+                    <hr> 
+                    <!-- <a href="#" class="btn btn-out btn-primary btn-square btn-main" data-abc="true"> Make Purchase </a>  -->
+                     <button
+                       type="button"
+                       class="btn btn-out btn-primary btn-square btn-main"
+                       routerLink="/shipping"
+                      >
+                       Make Purchase
+                    </button>
+                    <button 
+                     type="button" 
+                     class="btn btn-out btn-success btn-square btn-main mt-2" 
+                     routerLink="/home"
+                     >Continue Shopping
+                    </button>
                 </div>
             </div>
         </aside>

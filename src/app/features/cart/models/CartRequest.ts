@@ -1,4 +1,4 @@
-export interface ICartRequest
+export interface CartRequest
 {
     foodId:number;
     quantity:number

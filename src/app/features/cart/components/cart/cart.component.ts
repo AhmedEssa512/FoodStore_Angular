@@ -1,49 +1,47 @@
 import { Component } from '@angular/core';
-import { ICart } from '../../models/ICart';
+import { Cart } from '../../models/Cart';
 import { CommonModule } from '@angular/common';
-import { ICartItem } from '../../models/ICartItem';
+import { CartItem } from '../../models/CartItem';
 import { FormsModule } from '@angular/forms';
-import { error } from 'console';
 import { CartService } from '../../services/cart.service';
+import { RouterModule } from '@angular/router';
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-cart',
   standalone: true,
-  imports: [FormsModule,CommonModule],
+  imports: [FormsModule,CommonModule,RouterModule],
   templateUrl: './cart.component.html',
   styleUrl: './cart.component.css'
 })
 export class CartComponent {
-  cart: ICart | null = null;
+  cart: Cart | null = null;
   loading = false;
   errorMessage = '';
 
-  constructor(private _cartService: CartService) {}
+  constructor(private cartService: CartService,private authService:AuthService) {}
 
   ngOnInit(): void {
     this.loadCart();
   }
 
-  private loadCart(): void {
-    this.loading = true;
-    this._cartService.getCart().subscribe({
-      next: (data) => {
-        this.cart = data;
-        this.errorMessage = '';
-        this.loading = false;
-      },
-      error: (error) => {
-        console.log(error);
-        this.cart = null;
-        this.loading = false;
-      }
-    });
-  }
+ private loadCart(): void {
+  
+ const cartObservable = this.authService.isLoggedIn()
+    ? this.cartService.getCartForAuthenticatedUser()
+    : this.cartService.getCartForGuestUser();
+
+  cartObservable.subscribe({
+    next: cart => this.cart = cart,
+    error: err => this.errorMessage = err.message || 'Failed to load cart.'
+  });
+
+}
 
 
-  deleteItem(item: ICartItem): void {
+  deleteItem(item: CartItem): void {
     const id = item.id <= 0 ? item.food.id : item.id ;
-    this._cartService.deleteCartItem(id).subscribe({
+    this.cartService.deleteCartItem(id).subscribe({
     next: () => {
       console.log('Item successfully deleted');
       if(this.cart)
@@ -57,14 +55,14 @@ export class CartComponent {
   });
   }
 
-  onQuantityChange(item: ICartItem, newQuantity: number): void {
+  onQuantityChange(item: CartItem, newQuantity: number): void {
 
     const qty = +newQuantity;
     if (item.quantity === qty) return;
   
     item.quantity = qty;
   
-    this._cartService.updateCartItem(item).subscribe({
+    this.cartService.updateCartItem(item).subscribe({
       next: () => {
 
         if(this.cart)

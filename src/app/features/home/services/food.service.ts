@@ -1,7 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IFood } from '../models/IFood';
+import { Food } from '../models/Food';
+import { PaginatedResponse } from '../../../shared/models/paginated-response.model';
+
 
 
 @Injectable({
@@ -17,13 +19,13 @@ export class FoodService {
     categoryId?: number;
     pageNumber?: number;
     pageSize?: number;
-  } = {}): Observable<IFood[]> {
+  } = {}): Observable<PaginatedResponse<Food>> {
     const httpParams = new HttpParams({ fromObject: { 
       ...(params.categoryId != null ? { categoryId: params.categoryId.toString() } : {}),
       ...(params.pageNumber ? { pageNumber: params.pageNumber.toString() } : {}),
       ...(params.pageSize ? { pageSize: params.pageSize.toString() } : {})
     }});
   
-    return this.http.get<IFood[]>(`${this.baseUrl}/foods`, { params: httpParams });
+    return this.http.get<PaginatedResponse<Food>>(`${this.baseUrl}`, { params: httpParams });
   }
 }

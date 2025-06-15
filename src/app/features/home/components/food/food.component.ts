@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
-import { IFood } from '../../models/IFood';
+import { Food } from '../../models/Food';
 import { CartService } from '../../../cart/services/cart.service';
-import { ICartRequest } from '../../../cart/models/ICartRequest';
+import { CartRequest } from '../../../cart/models/CartRequest';
 
 
 @Component({
@@ -18,7 +18,7 @@ export class FoodComponent {
 
   addToCart()
   {
-    const item: ICartRequest = {
+    const item: CartRequest = {
       foodId: this.food.id,
       quantity: 1
     };

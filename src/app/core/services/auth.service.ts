@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, catchError, filter, finalize, map, Observable, of, take, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
-import { IAuthRespone } from '../../features/auth/models/IAuthRespone';
-import { ILoginRequest } from '../../features/auth/models/ILoginRequest';
+import { AuthRespone } from '../../features/auth/models/AuthRespone';
+import { LoginRequest } from '../../features/auth/models/LoginRequest';
 
 @Injectable({
   providedIn: 'root'
@@ -22,8 +22,8 @@ export class AuthService {
 
   constructor(private _http: HttpClient, private router: Router) {}
 
-  login(loginRequest: ILoginRequest): Observable<IAuthRespone> {
-    return this._http.post<IAuthRespone>(`${this.apiUrl}/login`, loginRequest).pipe(
+  login(loginRequest: LoginRequest): Observable<AuthRespone> {
+    return this._http.post<AuthRespone>(`${this.apiUrl}/login`, loginRequest).pipe(
       tap((res) => {
 
         this.isLoggedInSubject.next(true);
@@ -75,7 +75,7 @@ export class AuthService {
       catchError((res) => of(null))   
     ).subscribe((res) => {
       this.isLoggedInSubject.next(false);
-      // this.router.navigate(['/login']);
+      this.router.navigate(['/login']);
     });
   }
 
@@ -83,5 +83,17 @@ export class AuthService {
   checkAuthStatus(): Observable<{ isAuthenticated: boolean }> {
     return this._http.get<{ isAuthenticated: boolean }>(`${this.apiUrl}/is-authenticated`);
   }
+
+  initializeLoginStatus(): void {
+  this.checkAuthStatus().pipe(
+    catchError(() => of({ isAuthenticated: false }))
+  ).subscribe((res) => {
+    this.isLoggedInSubject.next(res.isAuthenticated);
+  });
+}
+
+isLoggedIn(): boolean {
+  return this.isLoggedInSubject.value;
+}
 
 }
