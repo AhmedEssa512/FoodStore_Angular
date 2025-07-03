@@ -1,0 +1,139 @@
+<!-- <div class="container my-5 py-4 bg-light rounded shadow-sm">
+  <h3 class="mb-4 text-center fw-bold text-dark">Your Recent Orders</h3>
+
+  <div *ngIf="orders?.length; else noOrders">
+    <div class="list-group">
+      <div
+        *ngFor="let order of orders"
+        class="list-group-item mb-4 rounded shadow-sm bg-white order-card"
+      >
+        <div class="d-flex flex-wrap gap-3 mb-3 align-items-start">
+          
+           <img
+            [src]="order.imageUrl || 'assets/default-food.jpg'"
+            alt="Order Image"
+            class="rounded-circle shadow-sm"
+            height="80"
+            width="80"
+            loading="lazy"
+            style="object-fit: cover; border: 1px solid #dee2e6; background-color: #f8f9fa;"
+          />
+         
+          <div class="flex-grow-1">
+            <h5 class="fw-semibold text-secondary mb-1">Order #{{ order.id }}</h5>
+            <p class="mb-1 text-muted">{{ order.FoodName }}</p>
+            <small class="text-muted">{{ order.date | date: 'medium' }}</small>
+
+            <div class="mt-2">
+              <p class="mb-1"><strong>Address:</strong> {{ order.address }}</p>
+              <p class="mb-1"><strong>Phone:</strong> {{ order.phone }}</p>
+              <p class="mb-0"><strong>Quantity:</strong> {{ order.quantity }}</p>
+            </div>
+          </div>
+
+        
+          <div class="ms-auto text-end">
+            <span
+              class="badge status-badge mb-2"
+              [ngClass]="{
+                'pending': order.status === 'Pending',
+                'confirmed': order.status === 'Confirmed',
+                'delivering': order.status === 'Out for Delivery',
+                'completed': order.status === 'Completed',
+                'cancelled': order.status === 'Cancelled'
+              }"
+              >{{ order.status }}</span
+            >
+            <div class="fs-5 fw-bold text-success">
+              ${{ order.total.toFixed(2) }}
+            </div>
+          </div>
+        </div>
+
+       
+        <div class="d-flex flex-wrap gap-2">
+          <button
+            *ngIf="order.status === 'Out for Delivery'"
+            class="btn btn-outline-info btn-sm d-flex align-items-center gap-1"
+            (click)="trackOrder(order.id)"
+            title="Track Order"
+          >
+            <i class="bi bi-truck"></i> Track
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <ng-template #noOrders>
+    <div class="text-center py-5 text-muted">
+      <i class="bi bi-basket fs-1 mb-3"></i>
+      <p class="fs-5">You haven't placed any orders yet.</p>
+      <button class="btn btn-primary btn-lg" (click)="goToShop()">Start Shopping</button>
+    </div>
+  </ng-template>
+</div> -->
+
+<div class="container my-5 py-4 bg-light rounded shadow-sm min-vh-100">
+  <h3 class="mb-4 text-center fw-bold text-dark">Your Recent Orders</h3>
+
+  <div *ngIf="orders?.length; else noOrders">
+    <div class="list-group">
+      <div
+        *ngFor="let order of orders"
+        class="card mb-4 p-3 shadow-sm bg-white order-card"
+      >
+        <div class="d-flex flex-column flex-md-row gap-3 align-items-start">
+          <!-- Image + Info Container -->
+          <figure class="itemside align-items-center flex-grow-1 m-0">
+            <!-- Order Info -->
+            <figcaption class="info ms-3">
+              <h5 class="fw-semibold text-secondary mb-1">Order #{{ order.id }}</h5>
+              <p class="mb-1 text-muted">{{ order.fullName }}</p>
+              <small class="text-muted">{{ order.createdAt | date: 'medium' }}</small>
+            </figcaption>
+          </figure>
+
+          <!-- Status Badge + Total -->
+          <div class="ms-md-auto text-end">
+            <span
+              class="badge status-badge mb-2"
+              [ngClass]="{
+                'pending': order.status === 'Pending',
+                'confirmed': order.status === 'Preparing',
+                'delivering': order.status === 'Delivered',
+                'completed': order.status === 'Failed',
+                'cancelled': order.status === 'Cancelled'
+              }"
+            >
+              {{ order.status }}
+            </span>
+
+            <div class="fs-5 fw-bold text-success">
+              ${{ order.total.toFixed(2) }}
+            </div>
+
+             <div class="mt-3">
+              <button class="btn btn-outline-primary btn-sm w-100 w-md-auto" (click)="viewOrderDetails(order.id)">
+                <i class="bi bi-eye me-1"></i> Details
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- No Orders Template -->
+  <ng-template #noOrders>
+    <div class="text-center py-5 text-muted">
+      <i class="bi bi-basket fs-1 mb-3"></i>
+      <p class="fs-5">You haven't placed any orders yet.</p>
+      <button class="btn btn-primary btn-lg" (click)="goToShop()">Start Shopping</button>
+    </div>
+  </ng-template>
+</div>
+
+

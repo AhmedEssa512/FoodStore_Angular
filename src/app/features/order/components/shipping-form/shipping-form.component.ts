@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { OrderService } from '../../services/order.service';
-import { CreateOrder } from '../../models/CreateOrder ';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -20,6 +19,7 @@ export class ShippingFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.customerInfo = this.fb.group({
+      fullName: ['', [Validators.required]],
       address: ['', [Validators.required]],
       phone: ['', Validators.required]
     });
