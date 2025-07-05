@@ -4,6 +4,8 @@ import { BehaviorSubject, catchError, filter, finalize, map, Observable, of, tak
 import { Router } from '@angular/router';
 import { AuthRespone } from '../../features/auth/models/AuthRespone';
 import { LoginRequest } from '../../features/auth/models/LoginRequest';
+import { RegisterRequest } from '../../features/auth/models/RegisterRequest';
+import { HttpErrorHandlerService } from './http-error-handler.service';
 
 @Injectable({
   providedIn: 'root'
@@ -20,10 +22,14 @@ export class AuthService {
   private isRefreshing = false;
   private refreshTokenSubject = new BehaviorSubject<boolean>(false);
 
-  constructor(private _http: HttpClient, private router: Router) {}
+  constructor(
+     private http: HttpClient,
+     private router: Router,
+     private errorHandler: HttpErrorHandlerService,
+    ) {}
 
   login(loginRequest: LoginRequest): Observable<AuthRespone> {
-    return this._http.post<AuthRespone>(`${this.apiUrl}/login`, loginRequest).pipe(
+    return this.http.post<AuthRespone>(`${this.apiUrl}/login`, loginRequest).pipe(
       tap((res) => {
 
         this.isLoggedInSubject.next(true);
@@ -54,7 +60,7 @@ export class AuthService {
     this.isRefreshing = true;
     this.refreshTokenSubject.next(false);
   
-    return this._http.post<void>(`${this.apiUrl}/refresh-token`,{}).pipe(
+    return this.http.post<void>(`${this.apiUrl}/refresh-token`,{}).pipe(
       tap(() => {
         this.isLoggedInSubject.next(true);
         this.refreshTokenSubject.next(true); 
@@ -71,7 +77,7 @@ export class AuthService {
   }
 
   logout():void {
-    this._http.post(`${this.apiUrl}/revoke-token`,{}).pipe(
+    this.http.post(`${this.apiUrl}/revoke-token`,{}).pipe(
       catchError((res) => of(null))   
     ).subscribe((res) => {
       this.isLoggedInSubject.next(false);
@@ -81,7 +87,7 @@ export class AuthService {
 
 
   checkAuthStatus(): Observable<{ isAuthenticated: boolean }> {
-    return this._http.get<{ isAuthenticated: boolean }>(`${this.apiUrl}/is-authenticated`);
+    return this.http.get<{ isAuthenticated: boolean }>(`${this.apiUrl}/is-authenticated`);
   }
 
   initializeLoginStatus(): void {
@@ -95,5 +101,11 @@ export class AuthService {
 isLoggedIn(): boolean {
   return this.isLoggedInSubject.value;
 }
+
+register(data: RegisterRequest): Observable<any> {
+    return this.http.post(`${this.apiUrl}/register`, data).pipe(
+      catchError(this.errorHandler.handleError)
+    );
+  }
 
 }

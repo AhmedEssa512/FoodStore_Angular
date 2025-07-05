@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, map, Observable, of, retry, switchMap, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, Observable, of, retry, switchMap, tap, throwError } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { HttpErrorHandlerService } from '../../../core/services/http-error-handler.service';
 import { Food } from '../../home/models/Food';
@@ -16,6 +16,9 @@ export class CartService {
   private readonly apiUrl = 'https://localhost:7268/api/Cart';
   private readonly foodIdsUrl = 'https://localhost:7268/api/Food';
   private cartKey = 'guest_cart';
+
+  private cartItemCount = new BehaviorSubject<number>(0);
+  cartItemCount$ = this.cartItemCount.asObservable();
 
   constructor(
       private http: HttpClient,
@@ -111,7 +114,11 @@ getCartForGuestUser(): Observable<Cart> {
 
   mergeGuestCartToBackend(): void {
     const guestCart = this.getCartFromLocalStorage(); // [{ foodId, quantity }]
-    if (guestCart.length === 0) return;
+
+    if(guestCart.length === 0){
+        this.updateCartItemCount();
+        return;
+      } 
   
     this.http.post(`${this.apiUrl}/merge`, guestCart).subscribe({
       next: () => {
@@ -188,6 +195,12 @@ getCartForGuestUser(): Observable<Cart> {
       })
     );
   }
+
+  private updateCartItemCount(): void {
+  const guestCart = this.getCartFromLocalStorage();
+  const count = guestCart.reduce((total, item) => total + item.quantity, 0);
+  this.cartItemCount.next(count);
+}
   
   
   

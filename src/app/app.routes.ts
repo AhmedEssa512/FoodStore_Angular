@@ -9,6 +9,7 @@ import { ShippingFormComponent } from './features/order/components/shipping-form
 import { authGuard } from './core/guards/auth.guard';
 import { OrderHistoryComponent } from './features/order/components/order-history/order-history.component';
 import { OrderDetailsComponent } from './features/order/components/order-details/order-details.component';
+import { RegisterComponent } from './features/auth/components/register/register.component';
 
 
 export const routes: Routes = [
@@ -34,6 +35,8 @@ export const routes: Routes = [
         component: AuthLayoutComponent,
         children: [
           { path: 'login', component: LoginComponent },
+          { path: 'register', component: RegisterComponent },
+
           
         ],
       },
