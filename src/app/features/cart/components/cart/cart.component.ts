@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { CartService } from '../../services/cart.service';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../../core/services/auth.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-cart',
@@ -18,29 +19,38 @@ export class CartComponent {
   cart: Cart | null = null;
   loading = false;
   errorMessage = '';
+  // cartItemCount$: Observable<number>;
 
-  constructor(private cartService: CartService,private authService:AuthService) {}
+  constructor(
+    private cartService: CartService,
+  ) {
+    // this.cartItemCount$ = this.cartService.cartItemCount$;
+  }
 
   ngOnInit(): void {
     this.loadCart();
   }
 
  private loadCart(): void {
-  
- const cartObservable = this.authService.isLoggedIn()
-    ? this.cartService.getCartForAuthenticatedUser()
-    : this.cartService.getCartForGuestUser();
-
-  cartObservable.subscribe({
-    next: cart => this.cart = cart,
-    error: err => this.errorMessage = err.message || 'Failed to load cart.'
+  this.loading = true;
+  this.cartService.getCart().subscribe({
+     next: cart => {
+        this.cart = cart;
+        this.loading = false;
+        console.log(cart);
+      },
+    error: err => {
+        this.errorMessage = err.message || 'Failed to load cart.';
+        this.loading = false;
+      }
   });
 
 }
 
 
   deleteItem(item: CartItem): void {
-    const id = item.id <= 0 ? item.food.id : item.id ;
+    const id = item.id <= 0 ? item.food.id : item.id;
+
     this.cartService.deleteCartItem(id).subscribe({
     next: () => {
       console.log('Item successfully deleted');
@@ -56,26 +66,22 @@ export class CartComponent {
   }
 
   onQuantityChange(item: CartItem, newQuantity: number): void {
-
     const qty = +newQuantity;
     if (item.quantity === qty) return;
-  
-    item.quantity = qty;
-  
-    this.cartService.updateCartItem(item).subscribe({
+
+    const updatedItem = { ...item, quantity: qty };
+
+    this.cartService.updateCartItem(updatedItem).subscribe({
       next: () => {
-
-        if(this.cart)
-        {
-          this.cart.items.find(i => i.food.id === item.food.id)!.quantity = newQuantity;
+        if (this.cart) {
+          const existingItem = this.cart.items.find(i => i.food.id === item.food.id);
+          if (existingItem) existingItem.quantity = qty;
         }
-
       },
-      error: (err) => {
+      error: err => {
         console.error('Error updating item:', err);
       }
     });
-
   }
 
 

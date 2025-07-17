@@ -28,4 +28,15 @@ export class FoodService {
   
     return this.http.get<PaginatedResponse<Food>>(`${this.baseUrl}`, { params: httpParams });
   }
+
+  searchFoods(query: string, pageNumber: number, pageSize: number) {
+  return this.http.get<PaginatedResponse<Food>>(`${this.baseUrl}/search`, {
+    params: {
+      query,
+      pageNumber,
+      pageSize
+    }
+  });
+ }
+
 }

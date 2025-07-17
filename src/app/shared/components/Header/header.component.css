@@ -1,0 +1,11 @@
+.search-button {
+  border: 1px solid #ccc;
+  background: transparent;
+  border-radius: 4px;
+  padding: 6px;
+}
+
+.search-button:hover {
+  background: transparent;
+  border-color: #999;
+}

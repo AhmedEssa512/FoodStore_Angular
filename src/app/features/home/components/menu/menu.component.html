@@ -1,12 +1,11 @@
-<!-- food section -->
-<section class="food_section layout_padding-bottom">
-    <div class="container">
-      <div class="heading_container heading_center">
-        <h2>
-          Our Menu
-        </h2>
-      </div>
 
+  <section class="food_section layout_padding-bottom menu-section">
+  <div class="container">
+    <div class="heading_container heading_center">
+      <h2>Our Menu</h2>
+    </div>
+
+    <ng-container *ngIf="foodList.length > 0; else emptyState">
       <ul class="filters_menu">
         <li
           [class.active]="selectedCategoryId === null"
@@ -21,27 +20,28 @@
         >
           {{ category.name }}
         </li>
-      </ul>    
+      </ul>
 
       <div class="filters-content">
         <div class="row grid">
-
-     <div class="col-sm-6 col-lg-4 all pizza" *ngFor="let Food of foodList">
-                  <app-food  [food]="Food"> </app-food>
-     </div>
-
-         
-
-                        
-      
+          <div class="col-sm-6 col-lg-4 all pizza" *ngFor="let Food of foodList">
+            <app-food [food]="Food"></app-food>
+          </div>
         </div>
       </div>
-      <div class="btn-box">
-        <a href="">
-          View More
-        </a>
-      </div>
-    </div>
-  </section>
 
-  <!-- end food section -->
+      <div class="btn-box">
+        <a href="">View More</a>
+      </div>
+    </ng-container>
+
+    <ng-template #emptyState>
+      <div class="text-center mt-5">
+        <p class="empty-state-message">
+          🍽️ No foods found. Try a different category or search term.
+        </p>
+      </div>
+    </ng-template>
+  </div>
+</section>
+

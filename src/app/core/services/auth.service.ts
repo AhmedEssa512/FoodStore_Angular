@@ -1,11 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, filter, finalize, map, Observable, of, take, tap, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, filter, finalize, map, mapTo, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { Router } from '@angular/router';
-import { AuthRespone } from '../../features/auth/models/AuthRespone';
 import { LoginRequest } from '../../features/auth/models/LoginRequest';
 import { RegisterRequest } from '../../features/auth/models/RegisterRequest';
 import { HttpErrorHandlerService } from './http-error-handler.service';
+import { User } from '../../features/profile/models/User';
+import { CartService } from '../../features/cart/services/cart.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,33 +16,37 @@ export class AuthService {
   private apiUrl = 'https://localhost:7268/api/Auth';
   
 
-  // BehaviorSubject tracks login status
-  private isLoggedInSubject = new BehaviorSubject<boolean>(false);
+  private isLoggedInSubject = new BehaviorSubject<boolean | null>(null);
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
 
+  private currentUserSubject = new BehaviorSubject<User | null>(null);
+  public currentUser$ = this.currentUserSubject.asObservable();
+
   private isRefreshing = false;
-  private refreshTokenSubject = new BehaviorSubject<boolean>(false);
+  private refreshTokenSubject = new BehaviorSubject<boolean>(false); 
 
   constructor(
      private http: HttpClient,
-     private router: Router,
      private errorHandler: HttpErrorHandlerService,
     ) {}
 
-  login(loginRequest: LoginRequest): Observable<AuthRespone> {
-    return this.http.post<AuthRespone>(`${this.apiUrl}/login`, loginRequest).pipe(
-      tap((res) => {
-
-        this.isLoggedInSubject.next(true);
-
-        return res;
-      }),
-      catchError((error) => {
-        console.error('Login failed:', error);
-        return throwError(() => error);
-      })
-    );
-  }
+  login(loginRequest: LoginRequest): Observable<User> {
+  return this.http.post<User>(`${this.apiUrl}/login`, loginRequest).pipe(
+    switchMap(() =>
+      this.getCurrentUser().pipe(
+        tap(user => {
+          this.isLoggedInSubject.next(true);
+          this.currentUserSubject.next(user);
+        })
+      )
+    ),
+    catchError(error => {
+      this.isLoggedInSubject.next(false);
+      this.currentUserSubject.next(null);
+      return this.errorHandler.handleError(error);
+    })
+  );
+}
 
 
   refreshToken(): Observable<void> {
@@ -65,8 +70,16 @@ export class AuthService {
         this.isLoggedInSubject.next(true);
         this.refreshTokenSubject.next(true); 
       }),
+      switchMap(() =>
+        this.getCurrentUser().pipe(
+          catchError(() => of(null)),
+          map(() => void 0) 
+        )
+      ),
       catchError(error => {
-        this.logout();
+        // this.logout();
+        this.isLoggedInSubject.next(false);
+        this.currentUserSubject.next(null);
         this.refreshTokenSubject.next(false); 
         return throwError(() => error);
       }),
@@ -76,35 +89,76 @@ export class AuthService {
     );
   }
 
-  logout():void {
-    this.http.post(`${this.apiUrl}/revoke-token`,{}).pipe(
-      catchError((res) => of(null))   
-    ).subscribe((res) => {
+
+  logout(): Observable<void> {
+  return this.http.post<void>(`${this.apiUrl}/revoke-token`, {}).pipe(
+    catchError(() => of(undefined)),
+    tap(() => {
       this.isLoggedInSubject.next(false);
-      this.router.navigate(['/login']);
-    });
+      this.currentUserSubject.next(null);
+    })
+  );
+}
+
+
+   checkAuthStatus(): Observable<{ isAuthenticated: boolean }> {
+    return this.http.get<{ isAuthenticated: boolean }>(`${this.apiUrl}/is-authenticated`).pipe(
+    catchError(error => {
+      console.warn('Auth check failed:', error);
+      return of({ isAuthenticated: false });
+    })
+   );
   }
 
 
-  checkAuthStatus(): Observable<{ isAuthenticated: boolean }> {
-    return this.http.get<{ isAuthenticated: boolean }>(`${this.apiUrl}/is-authenticated`);
+
+initializeLoginStatus(): Observable<void> {
+  return this.checkAuthStatus().pipe(
+    catchError(() => of({ isAuthenticated: false })),
+    switchMap(res => {
+      this.isLoggedInSubject.next(res.isAuthenticated);
+
+      if (res.isAuthenticated) {
+        return this.getCurrentUser().pipe(
+          tap(user => this.currentUserSubject.next(user)),
+          mapTo(void 0)
+        );
+      } else {
+        this.currentUserSubject.next(null);
+        return of(void 0);
+      }
+    })
+  );
+}
+
+
+  isLoggedIn(): boolean  {
+    return this.isLoggedInSubject.value === true;
   }
 
-  initializeLoginStatus(): void {
-  this.checkAuthStatus().pipe(
-    catchError(() => of({ isAuthenticated: false }))
-  ).subscribe((res) => {
-    this.isLoggedInSubject.next(res.isAuthenticated);
-  });
-}
+  register(data: RegisterRequest): Observable<any> {
+      return this.http.post(`${this.apiUrl}/register`, data).pipe(
+        catchError(this.errorHandler.handleError)
+      );
+    }
 
-isLoggedIn(): boolean {
-  return this.isLoggedInSubject.value;
-}
 
-register(data: RegisterRequest): Observable<any> {
-    return this.http.post(`${this.apiUrl}/register`, data).pipe(
-      catchError(this.errorHandler.handleError)
+  getAuthStatusOnce(): Observable<boolean> {
+    return this.isLoggedIn$.pipe(
+      filter((value): value is boolean => value !== null), 
+      take(1)
+    );
+  }
+
+  getCurrentUser(): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/me`).pipe(
+      tap(user => {
+        this.currentUserSubject.next(user);
+      }),
+      catchError(error => {
+        console.warn('Failed to fetch user info:', error);
+        return throwError(() => error);
+      })
     );
   }
 

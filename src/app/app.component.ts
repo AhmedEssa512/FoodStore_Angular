@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { NgxSpinnerModule } from 'ngx-spinner';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthService } from './core/services/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   standalone: true,
   imports: [
+    CommonModule,
     RouterOutlet,
     RouterModule,
     NgxSpinnerModule
@@ -18,10 +19,11 @@ import { AuthService } from './core/services/auth.service';
 export class AppComponent implements OnInit {
   title = 'FoodStore';
 
-  constructor(private authService:AuthService) {}
+  constructor() {}
+
 
   ngOnInit(){
-    this.authService.initializeLoginStatus();
+    // this.authService.initializeLoginStatus();
   }
 
 

@@ -92,6 +92,10 @@
  </div>
 </div>
 
+<!-- <div *ngIf="cartItemCount$ | async as count">
+  Cart Items: {{ count }}
+</div> -->
+
 <ng-template #loadingOrError>
     <div class="container text-center mt-5">
       <div *ngIf="loading">Loading your cart...</div>

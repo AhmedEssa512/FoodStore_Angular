@@ -29,14 +29,20 @@
                 <a class="nav-link" href="about.html">About</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="book.html">Book Table</a>
+                <a class="nav-link"
+                   *ngIf="(authService.isLoggedIn$ | async)"
+                   routerLink="/orders"
+                   style="text-transform: none;"
+                   >
+                   My Orders
+                </a>
               </li>
             </ul>
             <div class="user_option">
-              <a href="" class="user_link">
+              <a class="user_link" routerLink="/profile">
                 <i class="fa fa-user" aria-hidden="true"></i>
               </a>
-              <a class="cart_link"  routerLink="/cart">
+              <!-- <a class="cart_link relative inline-block"  routerLink="/cart">
                 <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
                   <g>
                     <g>
@@ -89,15 +95,37 @@
                   <g>
                   </g>
                 </svg>
-              </a>
-              <form class="form-inline">
-                <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit">
-                  <i class="fa fa-search" aria-hidden="true"></i>
-                </button>
+                <span *ngIf="cartItemCount$ | async as count"
+                      class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"
+                     >
+                  {{ count }}
+                </span>
+              </a> -->
+
+                        <a class="btn btn-light position-relative" routerLink="/cart">
+                           <i class="bi-cart-fill me-1"></i> Cart              
+                           <span  class="badge bg-dark text-white ms-1 rounded-pill" >
+                            {{ cartItemCount$ | async }}
+                          </span>
+                        </a>
+
+
+
+
+
+               <form class="form-inline" (ngSubmit)="onSearch()">
+                  <input
+                    type="text"
+                    [(ngModel)]="searchQuery"
+                    name="search"
+                    placeholder="Search foods..."
+                    class="form-control mr-sm-2"
+                    style="width: 150px;"
+                  />
+                  <button class="btn my-2 my-sm-0 nav_search-btn search-button" type="submit">
+                    <i class="fa fa-search" aria-hidden="true"></i>
+                  </button>
               </form>
-              <a href="" class="order_online">
-                Order Online
-              </a>
             </div>
           </div>
         </nav>
@@ -189,8 +217,8 @@
         </div>
 
 
-
-
+ 
+ 
 
 
 

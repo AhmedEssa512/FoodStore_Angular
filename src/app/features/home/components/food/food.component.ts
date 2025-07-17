@@ -23,6 +23,6 @@ export class FoodComponent {
       quantity: 1
     };
     console.log(item.foodId);
-    this.cartService.addToCart(item);
+    this.cartService.addToCart(item).subscribe();
   }
 }

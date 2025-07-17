@@ -21,9 +21,13 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   return next(clonedReq).pipe(
     catchError((error: HttpErrorResponse) => {
-      // Skip refresh on login or auth endpoints
-      const isAuthRequest = req.url.includes('/login') || req.url.includes('/register') || req.url.includes('/refresh-token');
-      if (error.status === 401 && !isAuthRequest && authService.isLoggedIn()) {
+
+      // Skip refresh token calling
+      const authEndpoints = ['/login', '/register', '/refresh-token', '/revoke-token'];
+      const isAuthRequest = authEndpoints.some(url => req.url.includes(url));
+
+  
+      if (error.status === 401 && !isAuthRequest) {
         
         return authService.refreshToken().pipe(
           switchMap(() => {
@@ -31,7 +35,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
             return next(clonedReq);
           }),
           catchError(refreshError => {
-            authService.logout();
+            authService.logout().subscribe();
             return throwError(() => refreshError);
           })
         );

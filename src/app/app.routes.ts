@@ -4,12 +4,12 @@ import { HomeComponent } from './features/home/components/home/home.component';
 import { MenuComponent } from './features/home/components/menu/menu.component';
 import { CartComponent } from './features/cart/components/cart/cart.component';
 import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
-import { LoginComponent } from './features/auth/components/login/login.component';
 import { ShippingFormComponent } from './features/order/components/shipping-form/shipping-form.component';
 import { authGuard } from './core/guards/auth.guard';
 import { OrderHistoryComponent } from './features/order/components/order-history/order-history.component';
 import { OrderDetailsComponent } from './features/order/components/order-details/order-details.component';
 import { RegisterComponent } from './features/auth/components/register/register.component';
+import { ProfileComponent } from './features/profile/components/profile/profile.component';
 
 
 export const routes: Routes = [
@@ -22,8 +22,10 @@ export const routes: Routes = [
           { path: 'menu', component: MenuComponent },
           { path: 'cart', component: CartComponent },
           { path: 'shipping', component: ShippingFormComponent, canActivate: [authGuard] },
-          { path: 'orders', component: OrderHistoryComponent, canActivate: [authGuard]},
+          { path: 'orders', component: OrderHistoryComponent, canActivate: [authGuard] },
           { path: 'orders/:id', component: OrderDetailsComponent, canActivate: [authGuard]},
+          { path: 'profile', component: ProfileComponent, canActivate: [authGuard]},
+
 
 
 
@@ -34,7 +36,8 @@ export const routes: Routes = [
         path: '',
         component: AuthLayoutComponent,
         children: [
-          { path: 'login', component: LoginComponent },
+          // { path: 'login', component: LoginComponent },
+          { path: 'login', loadComponent: () => import('./features/auth/components/login/login.component').then(m => m.LoginComponent)},
           { path: 'register', component: RegisterComponent },
 
           

@@ -3,8 +3,9 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router , ActivatedRoute } from '@angular/router';
 import { LoginRequest } from '../../models/LoginRequest';
-import { CartService } from '../../../cart/services/cart.service';
 import { AuthService } from '../../../../core/services/auth.service';
+import { map, switchMap } from 'rxjs';
+import { CartService } from '../../../cart/services/cart.service';
 
 
 @Component({
@@ -20,7 +21,14 @@ export class LoginComponent implements OnInit {
   errorMessage = '';
   returnUrl: string = '/'; // default to home
 
-  constructor(private fb: FormBuilder, private _authService:AuthService, private _cartService:CartService,private router: Router, private route:ActivatedRoute) {}
+  constructor(
+     private fb: FormBuilder,
+     private _authService:AuthService,
+     private router: Router,
+     private route:ActivatedRoute,
+     private cartService: CartService,
+
+    ) {}
 
   ngOnInit(): void {
 
@@ -37,11 +45,13 @@ export class LoginComponent implements OnInit {
     if (this.loginForm.valid) {
       const loginData: LoginRequest = this.loginForm.value;
   
-      this._authService.login(loginData).subscribe({
+      this._authService.login(loginData).pipe(
+        switchMap(user =>
+        this.cartService.mergeGuestCartToBackend().pipe(map(() => user))
+      )
+      ).subscribe({
         next: (response) => {
-          
           this.errorMessage = '';
-          this._cartService.mergeGuestCartToBackend();
           if (this.returnUrl?.startsWith('/')) {
             this.router.navigateByUrl(this.returnUrl);
           } else {
@@ -58,11 +68,6 @@ export class LoginComponent implements OnInit {
     }
   }
 
-
-  logOut()
-  {
-    this._authService.logout();
-  }
   
 
 }

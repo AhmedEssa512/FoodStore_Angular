@@ -1,0 +1,35 @@
+<div class="profile-container" *ngIf="user$ | async as user; else loading">
+  <div class="profile-card">
+    <h2>👤 My Profile</h2>
+
+    <div class="profile-field">
+      <label>Username:</label>
+      <span>{{ user.username || '—' }}</span>
+    </div>
+
+    <div class="profile-field">
+      <label>Email:</label>
+      <span>{{ user.email || '—' }}</span>
+    </div>
+
+    <div class="profile-field">
+      <label>Roles:</label>
+      <ng-container *ngIf="user.roles?.length; else noRoles">
+        <div class="roles">
+          <span class="role-badge" *ngFor="let role of user.roles">{{ role }}</span>
+        </div>
+      </ng-container>
+      <ng-template #noRoles><span>None</span></ng-template>
+    </div>
+
+    <button class="logout-btn" (click)="logout()">Logout</button>
+  </div>
+</div>
+
+<ng-template #loading>
+  <div class="profile-container">
+    <div class="profile-card">
+      <p>Loading profile...</p>
+    </div>
+  </div>
+</ng-template>
