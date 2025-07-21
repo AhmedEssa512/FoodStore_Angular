@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, map, Observable, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, map, Observable, switchMap, tap } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { CartItem } from '../models/CartItem';
 import { CartRequest } from '../models/CartRequest';
@@ -58,9 +58,6 @@ export class CartService {
     );
   }
 
-  // mergeGuestCartToBackend(): Observable<void> {
-  //   return this.backendCart.mergeGuestCart(this.guestCart.getRawCart());
-  // }
 
   mergeGuestCartToBackend(): Observable<void> {
   return this.backendCart.mergeGuestCart(this.guestCart.getRawCart()).pipe(

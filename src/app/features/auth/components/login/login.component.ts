@@ -60,7 +60,7 @@ export class LoginComponent implements OnInit {
 
         },
         error: (err) => {
-          this.errorMessage = err.error?.message || 'An unexpected error occurred.';
+          this.errorMessage = err.message;
         }
       });
     } else {

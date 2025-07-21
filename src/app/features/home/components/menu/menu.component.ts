@@ -8,6 +8,7 @@ import { Category } from '../../models/Category';
 import { Food } from '../../models/Food';
 import { PaginatedResponse } from '../../../../shared/models/paginated-response.model';
 import { ActivatedRoute } from '@angular/router';
+import { ifError } from 'assert';
 
 @Component({
   selector: 'app-menu',
@@ -81,7 +82,8 @@ export class MenuComponent implements OnInit {
 
   foods$.subscribe({
     next: (data) => this.handleFoodResponse(data),
-    error: (err) => console.log("loadfoods error , untill create interceptor for global errors")
+    error: (err) => console.log(`failed to load foods , the error: ${err}`)
+    
   });
 }
   

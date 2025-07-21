@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Food } from '../models/Food';
 import { PaginatedResponse } from '../../../shared/models/paginated-response.model';
+import { environment } from '../../../../environments/environment';
 
 
 
@@ -11,9 +12,11 @@ import { PaginatedResponse } from '../../../shared/models/paginated-response.mod
 })
 export class FoodService {
 
-  private baseUrl = 'https://localhost:7268/api/Food';
-
-  constructor(private http:HttpClient) { }
+  private apiUrl: string = environment.apiUrl;
+  
+  constructor(
+    private http:HttpClient,
+  ) {}
 
   getFoods(params: {
     categoryId?: number;
@@ -26,11 +29,11 @@ export class FoodService {
       ...(params.pageSize ? { pageSize: params.pageSize.toString() } : {})
     }});
   
-    return this.http.get<PaginatedResponse<Food>>(`${this.baseUrl}`, { params: httpParams });
+    return this.http.get<PaginatedResponse<Food>>(`${this.apiUrl}/food`, { params: httpParams });
   }
 
   searchFoods(query: string, pageNumber: number, pageSize: number) {
-  return this.http.get<PaginatedResponse<Food>>(`${this.baseUrl}/search`, {
+  return this.http.get<PaginatedResponse<Food>>(`${this.apiUrl}/food/search`, {
     params: {
       query,
       pageNumber,

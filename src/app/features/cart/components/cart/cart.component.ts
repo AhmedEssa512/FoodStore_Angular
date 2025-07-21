@@ -19,13 +19,10 @@ export class CartComponent {
   cart: Cart | null = null;
   loading = false;
   errorMessage = '';
-  // cartItemCount$: Observable<number>;
 
   constructor(
     private cartService: CartService,
-  ) {
-    // this.cartItemCount$ = this.cartService.cartItemCount$;
-  }
+  ){}
 
   ngOnInit(): void {
     this.loadCart();
@@ -40,7 +37,7 @@ export class CartComponent {
         console.log(cart);
       },
     error: err => {
-        this.errorMessage = err.message || 'Failed to load cart.';
+        this.errorMessage = err.message;
         this.loading = false;
       }
   });
@@ -61,6 +58,7 @@ export class CartComponent {
     },
     error: (err) => {
       console.error('Error deleting item:', err);
+      this.errorMessage = err.message;
     }
   });
   }
@@ -80,6 +78,7 @@ export class CartComponent {
       },
       error: err => {
         console.error('Error updating item:', err);
+        this.errorMessage = err.message;
       }
     });
   }

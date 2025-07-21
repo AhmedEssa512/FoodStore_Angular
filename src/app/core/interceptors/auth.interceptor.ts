@@ -15,8 +15,6 @@ import {
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
-  const authService = inject(AuthService);
-
   const clonedReq = req.clone({ withCredentials: true });
 
   return next(clonedReq).pipe(
@@ -28,7 +26,8 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
 
   
       if (error.status === 401 && !isAuthRequest) {
-        
+        const authService = inject(AuthService);
+
         return authService.refreshToken().pipe(
           switchMap(() => {
             // Retry the original request

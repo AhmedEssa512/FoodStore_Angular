@@ -56,7 +56,7 @@ export class RegisterComponent implements OnInit{
         this.router.navigate(['/']); // or a success page
       },
       error: (err) => {
-        this.errorMessage = err.error?.message || 'Registration failed.';
+        this.errorMessage = err.message;
       }
     });
  }

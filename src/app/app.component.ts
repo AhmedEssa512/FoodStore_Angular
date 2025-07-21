@@ -22,9 +22,7 @@ export class AppComponent implements OnInit {
   constructor() {}
 
 
-  ngOnInit(){
-    // this.authService.initializeLoginStatus();
-  }
+  ngOnInit(){}
 
 
 }

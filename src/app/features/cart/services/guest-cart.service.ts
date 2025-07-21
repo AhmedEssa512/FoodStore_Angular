@@ -1,26 +1,30 @@
-import { Inject, inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { CartRequest } from '../models/CartRequest';
 import { CartItem } from '../models/CartItem';
-import { HttpErrorHandlerService } from '../../../core/services/http-error-handler.service';
 import { HttpClient } from '@angular/common/http';
 import { Cart } from '../models/Cart';
-import { BehaviorSubject, catchError, map, Observable, of } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { Food } from '../../home/models/Food';
 import { isPlatformBrowser } from '@angular/common';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GuestCartService {
 
+  private apiUrl: string = environment.apiUrl;
   private readonly cartKey = 'guest_cart';
-  private readonly foodIdsUrl = 'https://localhost:7268/api/Food';
+  
   private isBrowser: boolean;
    
 
-  constructor(private http: HttpClient, private errorHandler: HttpErrorHandlerService, @Inject(PLATFORM_ID) platformId: Object) {
+  constructor(
+     private http: HttpClient,
+      @Inject(PLATFORM_ID) platformId: Object,
+    ){
      this.isBrowser = isPlatformBrowser(platformId);
-  }
+    }
 
   getCart(): Observable<Cart> {
     const localItems = this.getFromLocalStorage();
@@ -30,7 +34,7 @@ export class GuestCartService {
       return of({ id: 0, userId: '', items: [], total: 0 });
     }
 
-    return this.http.post<Food[]>(`${this.foodIdsUrl}/batch`, foodIds).pipe(
+    return this.http.post<Food[]>(`${this.apiUrl}/food/batch`, foodIds).pipe(
       map((foods) => {
         const items = foods.map(food => {
           const matching = localItems.find(i => i.foodId === food.id);
@@ -48,7 +52,6 @@ export class GuestCartService {
         const total = items.reduce((sum, item) => sum + item.price, 0);
         return { id: 0, userId: '', items, total };
       }),
-      catchError(err => this.errorHandler.handleError(err))
     );
   }
 

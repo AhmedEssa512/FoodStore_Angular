@@ -20,7 +20,6 @@ export class OrderHistoryComponent implements OnInit {
    constructor(private orderService:OrderService, private router: Router ){}
 
   ngOnInit() {
-    // Mock data, replace with real API call
     this.loadOrders();
   }
 
@@ -30,9 +29,9 @@ export class OrderHistoryComponent implements OnInit {
       (data: OrderSummary[]) => {
         this.orders = data;
       },
-      (error) => {
-        console.error('Error fetching orders in component:', error);
-        this.errorMessage = 'Failed to load orders. Please try again later.';
+      (err) => {
+        console.error('Error fetching orders in component:', err);
+        this.errorMessage = err.message;
       }
     );
   }
