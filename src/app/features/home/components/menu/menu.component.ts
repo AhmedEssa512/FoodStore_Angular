@@ -26,7 +26,7 @@ export class MenuComponent implements OnInit {
     errorMessage = '';
     selectedCategoryId: number | null = null;
     currentPage: number = 1;
-    pageSize: number = 10;
+    pageSize: number = 9;
     searchQuery: string | null = null;
 
     constructor(private _foodService :FoodService, private _categoryService :CategoryService, private route: ActivatedRoute ) {}
@@ -42,35 +42,8 @@ export class MenuComponent implements OnInit {
 
     this.loadCategories();
 
-      // this.loadFoods();
-      // this.loadCategories();
     }
   
-    // private loadFoods(): void {
-    //   this._foodService.getFoods({
-    //     categoryId: this.selectedCategoryId ?? undefined,
-    //     pageNumber: this.currentPage,
-    //     pageSize: this.pageSize
-    //   }).subscribe({
-    //     next: (data: PaginatedResponse<Food>) => {
-    //       this.foodList = data.items;
-    //       this.pagination = {
-    //     pageNumber: data.pageNumber,
-    //     pageSize: data.pageSize,
-    //     totalCount: data.totalCount,
-    //     totalPages: data.totalPages,
-    //     hasPreviousPage: data.hasPreviousPage,
-    //     hasNextPage: data.hasNextPage
-    //   };
-    //       console.log('Foods:', data);
-    //     },
-    //     error: (err) => {
-    //       this.errorMessage = 'Failed to load foods';
-    //       console.error(err);
-    //     }
-    //   });
-    // }
-
   loadFoods(): void {
   const foods$ = this.searchQuery
     ? this._foodService.searchFoods(this.searchQuery, this.currentPage, this.pageSize)
@@ -118,6 +91,25 @@ export class MenuComponent implements OnInit {
       hasNextPage: data.hasNextPage
     };
   }
+
+  goToPage(page: number): void {
+  if (!this.pagination || page < 1 || page > this.pagination.totalPages) return;
+
+  this.currentPage = page;
+  this.loadFoods();
+}
+
+getPageNumbers(): number[] {
+  const totalPages = this.pagination?.totalPages ?? 0;
+  const pages: number[] = [];
+
+  for (let i = 1; i <= totalPages; i++) {
+    pages.push(i);
+  }
+
+  return pages;
+}
+
   
 }
 

@@ -30,16 +30,40 @@
         </div>
       </div>
 
-      <div class="btn-box">
-        <a href="">View More</a>
-      </div>
-    </ng-container>
+                                  <!-- Pagination -->
+
+    <nav *ngIf="pagination.totalPages > 1" aria-label="Page navigation" class="mt-4">
+      <ul class="pagination justify-content-center">
+
+        <!-- Previous Button -->
+        <li class="page-item" [class.disabled]="!pagination.hasPreviousPage">
+          <a class="page-link" href="#" (click)="goToPage(currentPage - 1); $event.preventDefault()">Previous</a>
+        </li>
+
+        <!-- Page Numbers -->
+        <li 
+          class="page-item" 
+          *ngFor="let page of getPageNumbers()" 
+          [class.active]="page === currentPage">
+          <a class="page-link" href="#" (click)="goToPage(page); $event.preventDefault()">
+            {{ page }}
+          </a>
+        </li>
+
+        <!-- Next Button -->
+        <li class="page-item" [class.disabled]="!pagination.hasNextPage">
+          <a class="page-link" href="#" (click)="goToPage(currentPage + 1); $event.preventDefault()">Next</a>
+        </li>
+
+      </ul>
+    </nav>
+
+</ng-container>
 
     <ng-template #emptyState>
       <div class="text-center mt-5">
         <p class="empty-state-message">
           🍽️ No foods found. Try a different category or search term.
-           <!-- {{ errorMessage }} -->
         </p>
       </div>
     </ng-template>
