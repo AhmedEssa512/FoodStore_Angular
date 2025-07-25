@@ -10,6 +10,8 @@ import { OrderHistoryComponent } from './features/order/components/order-history
 import { OrderDetailsComponent } from './features/order/components/order-details/order-details.component';
 import { RegisterComponent } from './features/auth/components/register/register.component';
 import { ProfileComponent } from './features/profile/components/profile/profile.component';
+import { ForgotPasswordComponent } from './features/auth/components/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from './features/auth/components/reset-password/reset-password.component';
 
 
 export const routes: Routes = [
@@ -25,10 +27,6 @@ export const routes: Routes = [
           { path: 'orders', component: OrderHistoryComponent, canActivate: [authGuard] },
           { path: 'orders/:id', component: OrderDetailsComponent, canActivate: [authGuard]},
           { path: 'profile', component: ProfileComponent, canActivate: [authGuard]},
-
-
-
-
         ],
       },
 
@@ -36,11 +34,10 @@ export const routes: Routes = [
         path: '',
         component: AuthLayoutComponent,
         children: [
-          // { path: 'login', component: LoginComponent },
           { path: 'login', loadComponent: () => import('./features/auth/components/login/login.component').then(m => m.LoginComponent)},
           { path: 'register', component: RegisterComponent },
-
-          
+          { path: 'forgot-password', component: ForgotPasswordComponent },
+          { path: 'reset-password', component: ResetPasswordComponent },
         ],
       },
     

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router , ActivatedRoute } from '@angular/router';
+import { Router , ActivatedRoute, RouterModule } from '@angular/router';
 import { LoginRequest } from '../../models/LoginRequest';
 import { AuthService } from '../../../../core/services/auth.service';
 import { map, switchMap } from 'rxjs';
@@ -11,7 +11,7 @@ import { CartService } from '../../../cart/services/cart.service';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule,CommonModule],
+  imports: [ReactiveFormsModule,RouterModule ,CommonModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })

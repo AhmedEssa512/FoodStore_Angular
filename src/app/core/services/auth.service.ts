@@ -5,13 +5,16 @@ import { LoginRequest } from '../../features/auth/models/LoginRequest';
 import { RegisterRequest } from '../../features/auth/models/RegisterRequest';
 import { User } from '../../features/profile/models/User';
 import { environment } from '../../../environments/environment';
+import { OperationResult } from '../../features/auth/models/OperationResult ';
+import { ResetPasswordRequest } from '../../features/auth/models/ResetPasswordRequest';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
     
-  private apiUrl: string = environment.apiUrl;
+  // private apiUrl: string = environment.apiUrl;
+  private apiUrl = environment.apiUrl + '/auth';
 
   private isLoggedInSubject = new BehaviorSubject<boolean | null>(null);
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
@@ -27,7 +30,7 @@ export class AuthService {
     ){}
 
   login(loginRequest: LoginRequest): Observable<User> {
-  return this.http.post<User>(`${this.apiUrl}/auth/login`, loginRequest).pipe(
+  return this.http.post<User>(`${this.apiUrl}/login`, loginRequest).pipe(
     switchMap(() =>
       this.getCurrentUser().pipe(
         tap(user => {
@@ -56,7 +59,7 @@ export class AuthService {
   this.isRefreshing = true;
   this.refreshTokenSubject.next(false);
 
-  return this.http.post<void>(`${this.apiUrl}/auth/refresh-token`, {}).pipe(
+  return this.http.post<void>(`${this.apiUrl}/refresh-token`, {}).pipe(
     tap(() => {
       this.isLoggedInSubject.next(true);
       this.refreshTokenSubject.next(true); 
@@ -75,7 +78,7 @@ export class AuthService {
 
 
   logout(): Observable<void> {
-  return this.http.post<void>(`${this.apiUrl}/auth/revoke-token`, {}).pipe(
+  return this.http.post<void>(`${this.apiUrl}/revoke-token`, {}).pipe(
     tap(() => {
       this.isLoggedInSubject.next(false);
       this.currentUserSubject.next(null);
@@ -85,7 +88,7 @@ export class AuthService {
 
 
    checkAuthStatus(): Observable<{ isAuthenticated: boolean }> {
-    return this.http.get<{ isAuthenticated: boolean }>(`${this.apiUrl}/auth/is-authenticated`).pipe(
+    return this.http.get<{ isAuthenticated: boolean }>(`${this.apiUrl}/is-authenticated`).pipe(
     catchError(error => {
       console.warn('Auth check failed:', error);
       return of({ isAuthenticated: false });
@@ -119,7 +122,7 @@ initializeLoginStatus(): Observable<void> {
   }
 
   register(data: RegisterRequest): Observable<any> {
-  return this.http.post(`${this.apiUrl}/auth/register`, data);
+  return this.http.post(`${this.apiUrl}/register`, data);
 }
 
 
@@ -131,11 +134,19 @@ initializeLoginStatus(): Observable<void> {
   }
 
   getCurrentUser(): Observable<User> {
-  return this.http.get<User>(`${this.apiUrl}/auth/me`).pipe(
+  return this.http.get<User>(`${this.apiUrl}/me`).pipe(
     tap(user => {
       this.currentUserSubject.next(user);
     })
   );
 }
+
+  forgotPassword(email: string): Observable<OperationResult> {
+    return this.http.post<OperationResult>(`${this.apiUrl}/forgot-password`, { email });
+  }
+
+  resetPassword(data: ResetPasswordRequest): Observable<OperationResult> {
+    return this.http.post<OperationResult>(`${this.apiUrl}/reset-password`, data);
+  }
 
 }

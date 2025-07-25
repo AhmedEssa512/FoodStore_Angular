@@ -55,6 +55,19 @@
         <button type="submit" class="btn btn-dark w-100" [disabled]="loginForm.invalid">
           Login
         </button>
+
+        <!-- Forgot Password Link -->
+        <div class="mb-3 mt-3 text-end">
+          <a routerLink="/forgot-password" class="text-decoration-none">Forgot your password</a>
+        </div>
+        
+        <!-- Register Redirect -->
+        <div class="mb-3 text-end">
+        <span>
+           Don't have an account?
+          <a routerLink="/register" class="text-decoration-none">Register</a>
+        </span>
+        </div>
       </div>
     </div>
   </div>
