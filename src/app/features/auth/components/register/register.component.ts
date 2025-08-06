@@ -18,6 +18,7 @@ export class RegisterComponent implements OnInit{
 
   registerForm!: FormGroup;
   errorMessage: string = '';
+  formErrors: { [key: string]: string[] } = {};
 
   constructor(
     private fb: FormBuilder,
@@ -55,8 +56,13 @@ export class RegisterComponent implements OnInit{
         this.cartService.mergeGuestCartToBackend();
         this.router.navigate(['/']); // or a success page
       },
-      error: (err) => {
-        this.errorMessage = err.message;
+      error: (err) => {      
+      if (err.validationErrors) {
+      this.formErrors = err.validationErrors; // the validation errors from backend are Upper 
+    
+    } else {
+      this.errorMessage = err.message;
+    }
       }
     });
  }

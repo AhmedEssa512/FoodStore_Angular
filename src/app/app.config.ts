@@ -10,6 +10,7 @@ import { AuthService } from './core/services/auth.service';
 import { CartService } from './features/cart/services/cart.service';
 import { firstValueFrom, switchMap } from 'rxjs';
 import { httpErrorInterceptor } from './core/interceptors/http-error.interceptor';
+import { unwrapApiResponseInterceptor } from './core/interceptors/unwrap-api-response.interceptor';
 
 export function appInitializer() {
   const authService = inject(AuthService);
@@ -29,7 +30,8 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptors([
       authInterceptor,
       loaderInterceptor,
-      httpErrorInterceptor
+      unwrapApiResponseInterceptor,
+      httpErrorInterceptor,
     ])
   ),
     provideAnimations(),

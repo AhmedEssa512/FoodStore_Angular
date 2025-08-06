@@ -13,11 +13,14 @@
             id="username"
             formControlName="username"
             class="form-control"
-            [ngClass]="{'is-invalid': registerForm.get('username')?.invalid && registerForm.get('username')?.touched}"
+            [ngClass]="{'is-invalid': (registerForm.get('username')?.invalid && registerForm.get('username')?.touched) || formErrors['Username'] }"
             placeholder="yourname"
           />
           <div class="invalid-feedback" *ngIf="registerForm.get('username')?.errors?.['required']">
             Username is required.
+          </div>
+           <div class="invalid-feedback" *ngFor="let msg of formErrors['username']">
+            {{ msg }}
           </div>
         </div>
 
@@ -29,7 +32,7 @@
             id="email"
             formControlName="email"
             class="form-control"
-            [ngClass]="{'is-invalid': registerForm.get('email')?.invalid && registerForm.get('email')?.touched}"
+            [ngClass]="{'is-invalid': (registerForm.get('email')?.invalid && registerForm.get('email')?.touched) || formErrors['Email']}"
             placeholder="you@example.com"
           />
           <div class="invalid-feedback" *ngIf="registerForm.get('email')?.errors?.['required']">
@@ -37,6 +40,9 @@
           </div>
           <div class="invalid-feedback" *ngIf="registerForm.get('email')?.errors?.['email']">
             Invalid email format.
+          </div>
+          <div class="invalid-feedback" *ngFor="let msg of formErrors['email']">
+            {{ msg }} 
           </div>
         </div>
 
@@ -48,7 +54,7 @@
             id="password"
             formControlName="password"
             class="form-control"
-            [ngClass]="{'is-invalid': registerForm.get('password')?.invalid && registerForm.get('password')?.touched}"
+            [ngClass]="{'is-invalid': (registerForm.get('password')?.invalid && registerForm.get('password')?.touched)  || formErrors['Password']}"
             placeholder="Enter your password"
           />
           <div class="invalid-feedback" *ngIf="registerForm.get('password')?.errors?.['required']">
@@ -60,6 +66,9 @@
           <div class="invalid-feedback" *ngIf="registerForm.get('password')?.errors?.['maxlength']">
             Must be no more than 20 characters.
           </div>
+        <div class="invalid-feedback d-block" *ngFor="let msg of formErrors['Password']">
+          {{ msg }}
+        </div>
         </div>
 
         <!-- Confirm Password Field (frontend only) -->
@@ -81,7 +90,7 @@
           </div>
         </div>
 
-        <!-- Error message from backend -->
+        <!-- General Error message from backend -->
         <div *ngIf="errorMessage" class="alert alert-danger text-center mb-3">
           {{ errorMessage }}
         </div>
@@ -91,13 +100,6 @@
           Register
         </button>
 
-        <!-- Login Redirect -->
-         <!-- <div class="text-end mt-3">
-          <span>
-            Already have an account?
-            <a routerLink="/login" class="text-decoration-none">Login</a>
-          </span>
-        </div> -->
         <div class="text-end mt-3">
         <span>
           Already have an account?

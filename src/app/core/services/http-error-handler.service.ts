@@ -11,10 +11,9 @@ export class HttpErrorHandlerService {
 
   handleError(error: HttpErrorResponse) {
     let errorMessage = 'An unexpected error occurred. Please try again.';
-
-    if (error instanceof HttpErrorResponse) {
+    
       // Handle HTTP errors
-      if (error.error instanceof ErrorEvent) {
+      if (typeof window !== 'undefined' && error.error instanceof window.ErrorEvent) {
         errorMessage = 'Something went wrong. Please check your connection.';
       } else {
         switch (error.status) {
@@ -22,7 +21,14 @@ export class HttpErrorHandlerService {
             errorMessage = 'Network issue. Please check your internet connection.';
             break;
           case 400:
-            errorMessage = error.error?.message || 'Invalid request.';
+          if (error.error?.data) {
+          // Backend validation errors
+          return throwError(() => ({
+            message: error.error.message || 'Validation failed',
+            validationErrors: error.error.data
+          }));
+        }
+        errorMessage = error.error?.message || 'Invalid request.';
             break;
           case 401:
             errorMessage = 'Session expired. Please log in again.';
@@ -40,8 +46,9 @@ export class HttpErrorHandlerService {
             errorMessage = `An unexpected error occurred. Status: ${error.status}`;
             break;
         }
+      
       }
-    }
+    
 
     console.error('Error occurred:', error); // untill implement logging
 
