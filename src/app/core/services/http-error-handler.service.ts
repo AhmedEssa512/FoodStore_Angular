@@ -11,8 +11,8 @@ export class HttpErrorHandlerService {
 
   handleError(error: HttpErrorResponse) {
     let errorMessage = 'An unexpected error occurred. Please try again.';
-    
-      // Handle HTTP errors
+    const apiError = error.error;
+
       if (typeof window !== 'undefined' && error.error instanceof window.ErrorEvent) {
         errorMessage = 'Something went wrong. Please check your connection.';
       } else {
@@ -21,15 +21,20 @@ export class HttpErrorHandlerService {
             errorMessage = 'Network issue. Please check your internet connection.';
             break;
           case 400:
-          if (error.error?.data) {
-          // Backend validation errors
+          if (apiError?.data && typeof apiError.data === 'object') {
+            // Validation error from ModelState
+            return throwError(() => ({
+              message: apiError.message || 'Validation failed',
+              validationErrors: apiError.data
+            }));
+          }
+
+          // Generic 400 error (like..business logic)
           return throwError(() => ({
-            message: error.error.message || 'Validation failed',
-            validationErrors: error.error.data
+            message: apiError?.message || 'Invalid request.',
+            validationErrors: null
           }));
-        }
-        errorMessage = error.error?.message || 'Invalid request.';
-            break;
+  
           case 401:
             errorMessage = 'Session expired. Please log in again.';
             break;

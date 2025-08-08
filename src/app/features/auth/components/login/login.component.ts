@@ -42,7 +42,10 @@ export class LoginComponent implements OnInit {
 
 
   onSubmit() {
-    if (this.loginForm.valid) {
+    if (this.loginForm.invalid) {
+    this.loginForm.markAllAsTouched();
+    return;
+  }
       const loginData: LoginRequest = this.loginForm.value;
   
       this._authService.login(loginData).pipe(
@@ -50,7 +53,7 @@ export class LoginComponent implements OnInit {
         this.cartService.mergeGuestCartToBackend().pipe(map(() => user))
       )
       ).subscribe({
-        next: (response) => {
+        next: () => {
           this.errorMessage = '';
           if (this.returnUrl?.startsWith('/')) {
             this.router.navigateByUrl(this.returnUrl);
@@ -63,11 +66,9 @@ export class LoginComponent implements OnInit {
           this.errorMessage = err.message;
         }
       });
-    } else {
-      this.loginForm.markAllAsTouched();  // Highlight invalid fields
-    }
+    } 
   }
 
   
 
-}
+
