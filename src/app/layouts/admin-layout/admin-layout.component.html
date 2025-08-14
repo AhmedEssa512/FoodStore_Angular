@@ -1,0 +1,28 @@
+<div class="d-flex vh-100"> 
+
+  <aside class="bg-dark text-white position-fixed top-0 start-0 h-100 border-end transition-width overflow-hidden"
+         style="z-index: 1030;"
+         [ngStyle]="{ width: isSidebarCollapsed ? '0' : '250px'}"
+        >
+      
+    <app-sidebar  [isCollapsed]="isSidebarCollapsed"></app-sidebar>
+  </aside>
+
+  <!-- Main Content Area -->
+
+  <div 
+     class="flex-grow-1 d-flex flex-column min-vh-100 transition-margin"
+     [ngStyle]="{ marginLeft: isSidebarCollapsed ? '0' : '250px' }">
+
+    <app-admin-nav (sidebarToggle)="toggleSidebar()"></app-admin-nav>
+
+    <!-- Main content -->
+    <main class="flex-grow-1 p-3">
+      <router-outlet></router-outlet>
+    </main>
+
+    <!-- Footer -->
+    <app-admin-footer></app-admin-footer>
+  </div>
+
+</div>

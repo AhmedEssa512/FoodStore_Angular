@@ -6,3 +6,22 @@
   -webkit-box-orient: vertical;
   min-height: 4.5em; /* Ensures consistent space even if fewer lines */
 }
+
+:host ::ng-deep .options button {
+  width: 40px;
+  height: 40px;
+  border-radius: 100%;
+  background: #ffbe33;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+
+   svg {
+    width: 20px;
+    height: 20px;
+    fill: currentColor; /* use text color */
+  }
+}

@@ -27,16 +27,13 @@
             "styles": [
               "src/styles.css",
               "src/assets/css/bootstrap.css",     
-              "src/assets/css/font-awesome.min.css", 
+          
+              "node_modules/bootstrap-icons/font/bootstrap-icons.css", 
               "src/assets/css/style.css",           
               "src/assets/css/responsive.css",
               "node_modules/ngx-spinner/animations/square-jelly-box.css"      
             ],
             "scripts": [
-              "src/assets/js/bootstrap.js",
-              "src/assets/js/custom.js",
-              "src/assets/js/jquery-3.4.1.min.js"
-
             ],
             "server": "src/main.server.ts",
             "prerender": true,
@@ -104,9 +101,7 @@
               "src/favicon.ico",
               "src/assets"
             ],
-            "styles": [
-              "src/styles.css"
-            ],
+            "styles": [],
             "scripts": []
           }
         }

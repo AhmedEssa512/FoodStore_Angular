@@ -1,0 +1,8 @@
+.nav-link {
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}

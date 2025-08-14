@@ -24,6 +24,7 @@ export class ProfileComponent {
 
    ){
     this.user$ = this.authService.currentUser$;
+    console.log(this.user$);
   }
 
   logout(): void {

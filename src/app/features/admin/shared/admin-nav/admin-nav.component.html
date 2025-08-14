@@ -1,0 +1,73 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom px-3">
+  <div class="container-fluid">
+
+    <!-- Left Nav -->
+    <ul class="navbar-nav me-auto">
+      <li class="nav-item">
+        <button 
+          type="button"
+          class="btn btn-outline-secondary me-2"
+          (click)="onToggleClick()"
+          aria-label="Toggle sidebar"
+        >
+          <i class="bi bi-list"></i>
+        </button>
+      </li>
+
+      <!-- <li class="nav-item d-none d-sm-inline-block">
+        <a class="nav-link" href="#">Home</a>
+      </li>
+      <li class="nav-item d-none d-sm-inline-block">
+        <a class="nav-link" href="#">Contact</a>
+      </li> -->
+    </ul>
+
+    <!-- Right Nav -->
+    <ul class="navbar-nav ms-auto align-items-center">
+
+      <!-- Search -->
+      <!-- <li class="nav-item">
+        <button class="btn btn-outline-secondary me-2" (click)="toggleSearch()">
+          <i class="bi bi-search"></i>
+        </button>
+      </li> -->
+
+      <!-- Messages -->
+      <!-- <li class="nav-item dropdown" [class.show]="isMessagesOpen">
+        <a class="nav-link position-relative" href="#" (click)="toggleMessages($event)">
+          <i class="bi bi-chat-dots"></i>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+            3
+          </span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end p-0" [class.show]="isMessagesOpen">
+          <li><a class="dropdown-item" href="#">Message 1</a></li>
+          <li><a class="dropdown-item" href="#">Message 2</a></li>
+          <li><a class="dropdown-item" href="#">Message 3</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item text-center" href="#">See All Messages</a></li>
+        </ul>
+      </li> -->
+
+      <!-- Notifications -->
+      <li class="nav-item dropdown ms-3" [class.show]="isNotificationsOpen">
+        <a class="nav-link position-relative" href="#" (click)="toggleNotifications($event)">
+          <i class="bi bi-bell"></i>
+          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-warning text-dark">
+            15
+          </span>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-end" [class.show]="isNotificationsOpen">
+          <li><h6 class="dropdown-header">15 Notifications</h6></li>
+          <li><a class="dropdown-item" href="#"><i class="bi bi-envelope me-2"></i>4 new messages</a></li>
+          <li><a class="dropdown-item" href="#"><i class="bi bi-people me-2"></i>8 friend requests</a></li>
+          <li><a class="dropdown-item" href="#"><i class="bi bi-file-earmark-text me-2"></i>3 new reports</a></li>
+          <li><hr class="dropdown-divider"></li>
+          <li><a class="dropdown-item text-center" href="#">See All Notifications</a></li>
+        </ul>
+      </li>
+
+    </ul>
+
+  </div>
+</nav>

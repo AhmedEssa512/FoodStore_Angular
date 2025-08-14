@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NavigationEnd, Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
-import { filter, Observable } from 'rxjs';
+import { filter, map, Observable } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { CartService } from '../../../features/cart/services/cart.service';
 
@@ -43,6 +43,13 @@ export class HeaderComponent {
   }
  }
 
+ isAdmin$ = this.authService.currentUser$.pipe(
+    map(user => user?.roles?.includes('Admin') ?? false)
+  );
 
+ testinheader()
+ {
+  console.log("Header here");
+ }
  
 }

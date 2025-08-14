@@ -66,6 +66,7 @@ export class AuthService {
     }),
     switchMap(() =>
       this.getCurrentUser().pipe(
+        tap(user => this.currentUserSubject.next(user)),
         catchError(() => of(null)), 
         map(() => void 0) 
       )
@@ -88,7 +89,8 @@ export class AuthService {
 
 
    checkAuthStatus(): Observable<{ isAuthenticated: boolean }> {
-    return this.http.get<{ isAuthenticated: boolean }>(`${this.apiUrl}/is-authenticated`).pipe(
+    return this.http.get<boolean>(`${this.apiUrl}/is-authenticated`).pipe(
+    map(isAuth => ({ isAuthenticated: isAuth })),
     catchError(error => {
       console.warn('Auth check failed:', error);
       return of({ isAuthenticated: false });
@@ -101,6 +103,7 @@ export class AuthService {
 initializeLoginStatus(): Observable<void> {
   return this.checkAuthStatus().pipe(
     switchMap(res => {
+      console.log(res +" res.isauth"+ res.isAuthenticated);
       this.isLoggedInSubject.next(res.isAuthenticated);
 
       if (res.isAuthenticated) {
@@ -136,6 +139,7 @@ initializeLoginStatus(): Observable<void> {
   getCurrentUser(): Observable<User> {
   return this.http.get<User>(`${this.apiUrl}/me`).pipe(
     tap(user => {
+      console.log('Loaded user from API getCurrentUser() :', user);
       this.currentUserSubject.next(user);
     })
   );
