@@ -1,0 +1,71 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+      <div class="card shadow rounded">
+        <div class="card-body p-4">
+          <h3 class="text-center mb-4">{{ isEdit ? 'Edit Food' : 'Create Food' }}</h3>
+
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            <!-- Name -->
+            <div class="mb-3">
+              <label class="form-label">Name *</label>
+              <input type="text" formControlName="name" class="form-control"
+                [ngClass]="{ 'is-invalid': form.get('name')?.invalid && form.get('name')?.touched }" />
+              <div class="invalid-feedback" *ngIf="form.get('name')?.errors?.['required']">Name is required.</div>
+            </div>
+
+            <!-- Description -->
+            <div class="mb-3">
+              <label class="form-label">Description *</label>
+              <textarea rows="3" formControlName="description" class="form-control"
+                [ngClass]="{ 'is-invalid': form.get('description')?.invalid && form.get('description')?.touched }"></textarea>
+              <div class="invalid-feedback" *ngIf="form.get('description')?.errors?.['required']">Description is required.</div>
+            </div>
+
+            <!-- Price -->
+            <div class="mb-3">
+              <label class="form-label">Price *</label>
+              <input type="number" formControlName="price" class="form-control"
+                [ngClass]="{ 'is-invalid': form.get('price')?.invalid && form.get('price')?.touched }" />
+              <div class="invalid-feedback" *ngIf="form.get('price')?.errors?.['required']">Price is required.</div>
+            </div>
+
+            <!-- Category -->
+            <div class="mb-3">
+              <label class="form-label">Category *</label>
+              <select formControlName="categoryId" class="form-control"
+                [ngClass]="{ 'is-invalid': form.get('categoryId')?.invalid && form.get('categoryId')?.touched }">
+                <option value="">Select category</option>
+                <option *ngFor="let c of categories" [value]="c.id">{{ c.name }}</option>
+              </select>
+              <div class="invalid-feedback" *ngIf="form.get('categoryId')?.errors?.['required']">Category is required.</div>
+            </div>
+
+            <!-- Image -->
+            <div class="mb-3">
+              <label class="form-label">Image {{ isEdit ? '' : '*' }}</label>
+              <input type="file" accept="image/*" class="form-control" (change)="onFileSelected($event)" />
+              <div *ngIf="!isEdit && fileError" class="text-danger small mt-1">{{ fileError }}</div>
+
+              <!-- Show existing preview on edit -->
+              <div class="mt-3" *ngIf="previewUrl">
+                <p>Preview:</p>
+                <img [src]="previewUrl" class="img-thumbnail" style="max-height: 150px;" />
+              </div>
+            </div>
+
+            <!-- Submit -->
+            <button type="submit" class="btn btn-primary w-100" [disabled]="form.invalid || loading">
+              {{ loading ? (isEdit ? 'Updating...' : 'Creating...') : (isEdit ? 'Update Food' : 'Create Food') }}
+            </button>
+
+            <!-- Error Message -->
+            <div *ngIf="errorMessage" class="alert alert-danger mt-3 text-center">
+              {{ errorMessage }}
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

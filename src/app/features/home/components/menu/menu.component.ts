@@ -4,30 +4,33 @@ import { CommonModule } from '@angular/common';
 import { FoodService } from '../../services/food.service';
 import { HttpClientModule } from '@angular/common/http';
 import { CategoryService } from '../../services/category.service';
-import { Category } from '../../models/Category';
 import { Food } from '../../models/Food';
 import { PaginatedResponse } from '../../../../shared/models/paginated-response.model';
 import { ActivatedRoute } from '@angular/router';
-import { ifError } from 'assert';
-import { ApiResponse } from '../../../../shared/models/api-response.models';
+import { PaginationComponent } from "../../../../shared/components/pagination/pagination.component";
+import { Category } from '../../../../shared/models/Category';
 
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [FoodComponent, CommonModule,HttpClientModule],
+  imports: [FoodComponent, CommonModule, HttpClientModule, PaginationComponent],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css'
 })
 export class MenuComponent implements OnInit {
 
-
-    foodList: Food[] = [];
-    pagination!: Omit<PaginatedResponse<Food>, 'items'>;
+  foodList: Food[] = [];
+  pagination : Omit<PaginatedResponse<Food>, 'items'> = {
+  pageNumber: 1,
+  pageSize: 9,
+  totalCount: 0,
+  totalPages: 0,
+  hasPreviousPage: false,
+  hasNextPage: false
+};
     categories: Category[] = [];
     errorMessage = '';
     selectedCategoryId: number | null = null;
-    currentPage: number = 1;
-    pageSize: number = 9;
     searchQuery: string | null = null;
 
     constructor(private _foodService :FoodService, private _categoryService :CategoryService, private route: ActivatedRoute ) {}
@@ -37,7 +40,7 @@ export class MenuComponent implements OnInit {
       this.route.queryParams.subscribe(params => {
       this.searchQuery = params['search'] || null;
       this.selectedCategoryId = null; // Clear category if search is active
-      this.currentPage = 1; // Reset page number
+      this.pagination.pageNumber = 1; // Reset page number
       this.loadFoods();
     });
 
@@ -47,11 +50,11 @@ export class MenuComponent implements OnInit {
   
   loadFoods(): void {
   const foods$ = this.searchQuery
-    ? this._foodService.searchFoods(this.searchQuery, this.currentPage, this.pageSize)
+    ? this._foodService.searchFoods(this.searchQuery, this.pagination.pageNumber, this.pagination.pageSize)
     : this._foodService.getFoods({
         categoryId: this.selectedCategoryId ?? undefined,
-        pageNumber: this.currentPage,
-        pageSize: this.pageSize
+        pageNumber: this.pagination.pageNumber,
+        pageSize: this.pagination.pageSize
       });
 
   foods$.subscribe({
@@ -77,7 +80,7 @@ export class MenuComponent implements OnInit {
     filterFoodsByCategory(categoryId: number | null): void {
       this.selectedCategoryId = categoryId;
       this.searchQuery = null;
-      this.currentPage = 1; // Reset to first page on filter
+      this.pagination.pageNumber = 1; // Reset to first page on filter
       this.loadFoods();
     }
 
@@ -93,22 +96,11 @@ export class MenuComponent implements OnInit {
     };
   }
 
-  goToPage(page: number): void {
-  if (!this.pagination || page < 1 || page > this.pagination.totalPages) return;
 
-  this.currentPage = page;
+onPageChange(page: number): void {
+  if (page < 1 || page > this.pagination.totalPages) return;
+  this.pagination.pageNumber = page;
   this.loadFoods();
-}
-
-getPageNumbers(): number[] {
-  const totalPages = this.pagination?.totalPages ?? 0;
-  const pages: number[] = [];
-
-  for (let i = 1; i <= totalPages; i++) {
-    pages.push(i);
-  }
-
-  return pages;
 }
 
   

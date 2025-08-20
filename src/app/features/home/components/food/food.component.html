@@ -3,7 +3,7 @@
     <div class="box"> 
       <div>
         <div class="img-box">
-          <img src="https://localhost:7268/{{ food?.imageUrl }}" alt="">
+          <img [src]="food?.imageUrl" [alt]="food?.name">
         </div>
         <div class="detail-box">
           <h5>

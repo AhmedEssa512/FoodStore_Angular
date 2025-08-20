@@ -1,0 +1,13 @@
+.pagination .page-item.active .page-link {
+  background-color: #353a3f; /* Bootstrap dark */
+  border-color: #353a3f;
+  color: #fff;
+}
+
+.pagination .page-link {
+  cursor: pointer;
+}
+
+.pagination .page-item.disabled .page-link {
+  cursor: not-allowed;
+}

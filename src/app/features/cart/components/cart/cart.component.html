@@ -17,7 +17,7 @@
                             <tr *ngFor="let item of cart!.items" >
                                 <td>
                                     <figure class="itemside align-items-center">
-                                        <div class="aside"><img src="https://localhost:7268/{{ item.food.imageUrl }}" [alt]="item.food.name" class="img-sm"></div>
+                                        <div class="aside"><img [src]="item.food.imageUrl" [alt]="item.food.name" class="img-sm"></div>
                                         <figcaption class="info">
                                             <a href="#" class="title text-dark" data-abc="true">{{ item.food.name }}</a>
                                             <p class="text-muted small">{{ item.food.description }}</p>
