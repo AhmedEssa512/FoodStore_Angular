@@ -4,7 +4,7 @@ import { ProductsService } from '../services/products.service';
 import { PaginatedResponse } from '../../../../../shared/models/paginated-response.model';
 import { CommonModule } from '@angular/common';
 import { PaginationComponent } from "../../../../../shared/components/pagination/pagination.component";
-import { RouterLink, RouterModule } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { DeleteConfirmationComponent } from "../../../../../shared/components/delete-confirmation/delete-confirmation.component";
 
 @Component({
@@ -75,11 +75,8 @@ export class ProductsListComponent implements OnInit{
 
     this.productsService.deleteProduct(this.selectedProduct.id).subscribe({
       next: () => {
-        // Option 1: reload from server (ensures sync with pagination)
         this.loadProducts();
 
-        // Option 2: remove locally (faster, but pagination might desync if last item deleted)
-        // this.products = this.products.filter(p => p.id !== this.selectedProduct!.id);
         console.log(`Deleted: ${this.selectedProduct!.name}`);
         this.closeDeleteModal();
       },
@@ -89,4 +86,12 @@ export class ProductsListComponent implements OnInit{
       }
     });
   }
+
+  toggleAvailability(product: ProductAdminList) {
+    this.productsService.toggleAvailability(product.id, !product.isAvailable)
+    .subscribe({
+      next: () => product.isAvailable = !product.isAvailable,
+      error: err => console.error('Failed to update availability', err)
+    });
+}
 }

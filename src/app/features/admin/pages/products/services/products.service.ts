@@ -63,4 +63,8 @@ getProductById(id: number): Observable<ProductResponse> {
 deleteProduct(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
+
+toggleAvailability(id: number, isAvailable: boolean) : Observable<void>{
+  return this.http.patch<void>(`${this.apiUrl}/${id}/availability`, isAvailable);
+}
 }

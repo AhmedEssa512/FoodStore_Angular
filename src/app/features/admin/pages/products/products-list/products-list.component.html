@@ -20,12 +20,21 @@
             <td>{{ product.name }}</td>
             <td>{{ product.categoryName }}</td>
             <td>${{ product.price }}</td>
-            <td>
+            <!-- <td>
               <span 
                 class="badge" 
                 [ngClass]="product.isAvailable ? 'bg-success' : 'bg-danger'">
                 {{ product.isAvailable ? 'Yes' : 'No' }}
               </span>
+            </td> -->
+            <td>
+              <div class="form-check form-switch">
+                <input 
+                  class="form-check-input"
+                  type="checkbox"
+                  [checked]="product.isAvailable"
+                  (change)="toggleAvailability(product)">
+              </div>
             </td>
             <td>{{ product.createdAt | date:'mediumDate' }}</td>
             <td>
