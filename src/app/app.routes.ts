@@ -7,11 +7,11 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { ShippingFormComponent } from './features/order/components/shipping-form/shipping-form.component';
 import { authGuard } from './core/guards/auth.guard';
 import { OrderHistoryComponent } from './features/order/components/order-history/order-history.component';
-import { OrderDetailsComponent } from './features/order/components/order-details/order-details.component';
 import { RegisterComponent } from './features/auth/components/register/register.component';
 import { ProfileComponent } from './features/profile/components/profile/profile.component';
 import { ForgotPasswordComponent } from './features/auth/components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './features/auth/components/reset-password/reset-password.component';
+import { OrderDetailsComponent } from './features/order/components/order-details/order-details.component';
 
 
 export const routes: Routes = [

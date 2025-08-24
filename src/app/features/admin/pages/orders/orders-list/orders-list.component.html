@@ -1,0 +1,82 @@
+<div class="card shadow-sm">
+  <div class="card-header bg-light d-flex justify-content-center">
+    <app-date-range-filter (filter)="onDateFilter($event)"></app-date-range-filter>
+  </div>
+  <div class="card-body p-0">
+    <table class="table table-hover align-middle mb-0">
+      <thead class="table-light">
+        <tr>
+          <th style="width: 5%">#</th>
+          <th style="width: 25%">Customer</th>
+          <th style="width: 15%" class="text-end">Total</th>
+          <th style="width: 20%">Created</th>
+          <th style="width: 15%">Status</th>
+          <th style="width: 20%">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let order of orders">
+          <td>{{ order.id }}</td>
+          <td>{{ order.fullName }}</td>
+          <td class="text-end">${{ order.total }}</td>
+          <td>{{ order.createdAt | date:'medium' }}</td>
+
+          <td>
+            <span class="badge"
+              [ngClass]="{
+                'bg-warning text-dark': order.status === 'Pending',
+                'bg-info text-dark': order.status === 'Preparing',
+                'bg-success': order.status === 'Delivered',
+                'bg-danger': order.status === 'Canceled'
+              }">
+              {{ order.status }}
+            </span>
+          </td>
+
+          <td>
+            <button *ngIf="order.status === 'Pending'"
+                    class="btn btn-sm btn-outline-info me-2"
+                    (click)="updateStatus(order.id, 'Preparing')">
+              Mark as Preparing
+            </button>
+
+            <button *ngIf="order.status === 'Preparing'"
+                    class="btn btn-sm btn-outline-success me-2"
+                    (click)="updateStatus(order.id, 'Delivered')">
+              Mark as Delivered
+            </button>
+
+            <button *ngIf="order.status !== 'Delivered' && order.status !== 'Canceled'"
+                    class="btn btn-sm btn-outline-danger">
+              Cancel
+            </button>
+
+            <button class="btn btn-sm btn-outline-primary ms-2"
+                    [routerLink]="['/admin/orders', order.id]">
+              View
+            </button>
+          </td>
+        </tr>
+
+        <tr *ngIf="orders.length === 0">
+          <td colspan="6" class="text-center py-3 text-muted">
+            No orders found.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+
+
+
+<app-pagination
+  [pageNumber]="pagination.pageNumber"
+  [totalPages]="pagination.totalPages"
+  [hasPreviousPage]="pagination.hasPreviousPage"
+  [hasNextPage]="pagination.hasNextPage"
+  (pageChange)="onPageChange($event)">
+</app-pagination>

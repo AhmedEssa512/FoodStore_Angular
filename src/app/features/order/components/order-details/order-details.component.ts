@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { OrderService } from '../../services/order.service';
 import { Order } from '../../models/Order';
+import { OrderService } from '../../services/order.service';
 
 @Component({
   selector: 'app-order-details',

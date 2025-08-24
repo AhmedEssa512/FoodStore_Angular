@@ -1,0 +1,76 @@
+<div class="container my-4 py-4 bg-white rounded shadow-sm" *ngIf="order;">
+  <h3 class="fw-bold mb-4 text-primary text-center">Order #{{ order.id }}</h3>
+
+  <div class="row g-4">
+    <!-- Order Info -->
+    <div class="col-md-6">
+      <h5 class="text-secondary">Order Info</h5>
+      <ul class="list-unstyled">
+        <li><strong>Date:</strong> {{ order.createdAt | date: 'medium' }}</li>
+        <li>
+          <strong>Status: </strong>
+          <span
+            class="badge"
+            [ngClass]="{
+              'bg-warning text-dark': order.status === 'Pending',
+              'bg-info text-dark': order.status === 'Preparing',
+              'bg-success': order.status === 'Delivered',
+              'bg-danger': order.status === 'Canceled'
+            }"
+          >
+            {{ order.status }}
+          </span>
+        </li>
+        <li><strong>Total:</strong> ${{ order.total.toFixed(2) }}</li>
+      </ul>
+    </div>
+
+    <!-- Customer Info -->
+    <div class="col-md-6">
+      <h5 class="text-secondary">Customer</h5>
+      <ul class="list-unstyled">
+        <li><strong>Name:</strong> {{ order.fullName }}</li>
+        <li><strong>Phone:</strong> {{ order.phone }}</li>
+        <li><strong>Address:</strong> {{ order.address }}</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Items Ordered -->
+  <div class="mt-4">
+    <h5 class="text-secondary">Items Ordered</h5>
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle">
+        <thead class="table-light">
+          <tr>
+            <th>Item</th>
+            <th class="text-end">Quantity</th>
+            <th class="text-end">Price</th>
+            <th class="text-end">Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of order.orderDetails">
+            <td>{{ item.foodName }}</td>
+            <td class="text-end">{{ item.quantity }}</td>
+            <td class="text-end">${{ item.price.toFixed(2) }}</td>
+            <td class="text-end">${{ (item.quantity * item.price).toFixed(2) }}</td>
+          </tr>
+        </tbody>
+        <tfoot class="table-light">
+          <tr>
+            <td colspan="3" class="text-end fw-bold">Total</td>
+            <td class="text-end fw-bold text-success">${{ order.total.toFixed(2) }}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- Back Button -->
+  <div class="text-center mt-4">
+    <button class="btn btn-outline-secondary" (click)="goBack()">
+      <i class="bi bi-arrow-left me-1"></i> Back to Orders
+    </button>
+  </div>
+</div>

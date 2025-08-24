@@ -1,0 +1,30 @@
+<div class="d-flex flex-wrap align-items-center justify-content-center mb-3 gap-4">
+  <!-- Start Date -->
+  <div class="d-flex align-items-center me-4">
+    <label class="form-label mb-0 small text-muted me-2">From</label>
+    <input
+      type="date"
+      class="form-control form-control-sm"
+      [(ngModel)]="startDate" />
+  </div>
+
+  <!-- End Date -->
+  <div class="d-flex align-items-center me-4">
+    <label class="form-label mb-0 small text-muted me-2">To</label>
+    <input
+      type="date"
+      class="form-control form-control-sm"
+      [(ngModel)]="endDate" />
+  </div>
+
+  <!-- Actions -->
+  <div class="d-flex gap-3">
+    <button class="btn btn-outline-primary btn-sm" (click)="applyFilter()">
+      <i class="bi bi-filter"></i> Apply
+    </button>
+    <button class="btn btn-outline-secondary btn-sm" (click)="resetFilter()">
+      <i class="bi bi-x-circle"></i> Reset
+    </button>
+  </div>
+</div>
+
