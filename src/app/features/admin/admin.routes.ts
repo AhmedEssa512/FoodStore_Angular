@@ -49,6 +49,13 @@ export const ADMIN_ROUTES: Routes = [
             m => m.ProductFormComponent
           )
       },
+      {
+        path: 'customers',
+        loadComponent: () =>
+          import('./pages/customers/customers.component').then(
+            m => m.CustomersComponent
+          )
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
   }

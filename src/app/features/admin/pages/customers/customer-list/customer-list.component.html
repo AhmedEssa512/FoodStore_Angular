@@ -1,0 +1,80 @@
+<div class="card shadow-sm">
+  <div class="card-body p-0">
+    <table class="table table-hover mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Username</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Loading State -->
+        <tr *ngIf="isLoading">
+          <td colspan="5" class="text-center py-3 text-muted">
+            Loading customers...
+          </td>
+        </tr>
+
+        <!-- No Data -->
+        <tr *ngIf="!isLoading && customers.length === 0">
+          <td colspan="5" class="text-center py-3 text-muted">
+            No customers found.
+          </td>
+        </tr>
+
+        <!-- Customers -->
+        <tr *ngFor="let customer of customers">
+          <td>{{ customer.userName }}</td>
+          <td>{{ customer.email }}</td>
+          <td>{{ customer.phoneNumber || '-' }}</td>
+          <td>
+            <span
+              class="badge"
+              [ngClass]="{
+                'bg-success': customer.isActive,
+                'bg-danger': !customer.isActive
+              }"
+            >
+              {{ customer.isActive ? 'Active' : 'Suspended' }}
+            </span>
+          </td>
+          <td class="text-end">
+            <!-- <button
+              class="btn btn-sm btn-outline-secondary me-2"
+              (click)="viewCustomer(customer.id)"
+            >
+              View
+            </button> -->
+            <button
+              class="btn btn-sm btn-outline-warning me-2"
+              (click)="updateStatus(customer)"
+            >
+              {{ customer.isActive ? 'Suspend' : 'Activate' }}
+            </button>
+            <!-- <button
+              class="btn btn-sm btn-outline-danger"
+              (click)="deleteCustomer(customer.id)"
+            >
+              Delete
+            </button> -->
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="card-footer">
+    <app-pagination
+      [pageNumber]="pagination.pageNumber"
+      [totalPages]="pagination.totalPages"
+      [hasPreviousPage]="pagination.hasPreviousPage"
+      [hasNextPage]="pagination.hasNextPage"
+      (pageChange)="onPageChange($event)"
+    >
+    </app-pagination>
+  </div>
+</div>
