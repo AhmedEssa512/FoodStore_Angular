@@ -24,42 +24,25 @@ export class OrderHistoryComponent implements OnInit {
   }
 
 
-  loadOrders(): void {
-    this.orderService.getOrders().subscribe(
-      (data: OrderSummary[]) => {
+    loadOrders(): void {
+    this.orderService.getOrders().subscribe({
+      next:(data: OrderSummary[]) =>{
         this.orders = data;
       },
-      (err) => {
+      error:(err) =>{
         console.error('Error fetching orders in component:', err);
         this.errorMessage = err.message;
       }
-    );
+    })
+      
   }
 
   viewOrderDetails(orderId: number): void {
-    this.router.navigate(['/orders', orderId]);  // Navigate to order details with order ID
+    this.router.navigate(['/orders', orderId]);    
   }
 
-
-
-  reorder(orderId: number) {
-    console.log('Reorder', orderId);
-    // Add order items again to cart
-  }
-
-  trackOrder(orderId: number) {
-    console.log('Track order', orderId);
-    // Navigate to tracking page or open tracking modal
-  }
-
-  rateOrder(orderId: number) {
-    console.log('Rate order', orderId);
-    // Open rating dialog/modal
-  }
-
-  goToShop() {
-    console.log('Navigate to shop');
-    // Navigate to shopping/catalog page
+ goToShop() {
+    this.router.navigate(['/home']);
   }
 
   

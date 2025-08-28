@@ -1,12 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { HttpErrorHandlerService } from '../../../core/services/http-error-handler.service';
 import { CreateOrder } from '../models/CreateOrder ';
-import { catchError, Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import { OrderResponse } from '../models/OrderResponse';
 import { OrderSummary } from '../models/OrderSummary';
 import { Order } from '../models/Order';
 import { environment } from '../../../../environments/environment';
+import { PaginatedResponse } from '../../../shared/models/paginated-response.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +15,6 @@ export class OrderService {
   private apiUrl: string = environment.apiUrl;
   constructor(
       private http: HttpClient,
-      private errorHandler: HttpErrorHandlerService,
   ) {}
 
  createOrder(order: CreateOrder): Observable<OrderResponse> {
@@ -23,12 +22,7 @@ export class OrderService {
 }
 
 getOrders(): Observable<OrderSummary[]> {
-    return this.http.get<OrderSummary[]>(`${this.apiUrl}/order`).pipe(
-      catchError(error => {
-        this.errorHandler.handleError(error);  
-        return of([]);  // Return an empty array as fallback
-      })
-    );
+    return this.http.get<OrderSummary[]>(`${this.apiUrl}/order`);
   }
 
   getOrderById(id: number): Observable<Order> {
