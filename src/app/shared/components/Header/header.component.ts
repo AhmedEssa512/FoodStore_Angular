@@ -47,9 +47,4 @@ export class HeaderComponent {
     map(user => user?.roles?.includes('Admin') ?? false)
   );
 
- testinheader()
- {
-  console.log("Header here");
- }
- 
 }
