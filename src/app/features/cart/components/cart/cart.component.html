@@ -62,7 +62,7 @@
                     </dl>
                     <dl class="dlist-align">
                         <dt>Discount:</dt>
-                        <dd class="text-right text-danger ml-3">- $10.00</dd>
+                        <dd class="text-right text-danger ml-3">- $0.00</dd>
                     </dl>
                     <dl class="dlist-align">
                         <dt>Total:</dt>
@@ -76,6 +76,7 @@
                        type="button"
                        class="btn btn-out btn-primary btn-square btn-main"
                        routerLink="/shipping"
+                       [disabled]="cart.items.length == 0"
                       >
                        Make Purchase
                     </button>
@@ -92,9 +93,6 @@
  </div>
 </div>
 
-<!-- <div *ngIf="cartItemCount$ | async as count">
-  Cart Items: {{ count }}
-</div> -->
 
 <ng-template #loadingOrError>
     <div class="container text-center mt-5">
@@ -102,5 +100,3 @@
       <div *ngIf="!loading && errorMessage" class="text-danger">{{ errorMessage }}</div>
     </div>
 </ng-template>
-
-<!-- Real template photos => https://i.imgur.com/1eq5kmC.png => https://i.imgur.com/hqiAldf.jpg => https://i.imgur.com/UwvU0cT.jpg -->
