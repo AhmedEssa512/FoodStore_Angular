@@ -6,6 +6,7 @@ import { passwordMatchValidator } from '../../../../shared/validators/password-m
 import { RegisterRequest } from '../../models/RegisterRequest';
 import { CartService } from '../../../cart/services/cart.service';
 import { Router, RouterModule } from '@angular/router';
+import { ApiError } from '../../../../core/models/ApiError';
 
 @Component({
   selector: 'app-register',
@@ -32,6 +33,7 @@ export class RegisterComponent implements OnInit{
     this.registerForm = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
     username: ['', Validators.required],
+    phoneNumber: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
     password: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
     confirmPassword: ['', Validators.required]
   }, {
@@ -48,18 +50,20 @@ export class RegisterComponent implements OnInit{
     const registerData: RegisterRequest = {
       email: this.registerForm.value.email,
       username: this.registerForm.value.username,
+      phoneNumber : this.registerForm.value.phoneNumber,
       password: this.registerForm.value.password
     };
 
     this.authService.register(registerData).subscribe({
       next: () => {
         this.cartService.mergeGuestCartToBackend();
-        this.router.navigate(['/']); // or a success page
+        this.router.navigate(['/']); 
       },
-      error: (err) => {      
+      error: (err:ApiError) => {      
+        console.log(err);
       if (err.validationErrors) {
-      this.formErrors = err.validationErrors; // the validation errors from backend are Upper 
-    
+      this.formErrors = err.validationErrors;
+      // the validation errors from backend are Upper 
     } else {
       this.errorMessage = err.message;
     }

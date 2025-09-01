@@ -19,7 +19,7 @@
           <div class="invalid-feedback" *ngIf="registerForm.get('username')?.errors?.['required']">
             Username is required.
           </div>
-           <div class="invalid-feedback" *ngFor="let msg of formErrors['username']">
+           <div class="invalid-feedback" *ngFor="let msg of formErrors['Username']">
             {{ msg }}
           </div>
         </div>
@@ -41,8 +41,37 @@
           <div class="invalid-feedback" *ngIf="registerForm.get('email')?.errors?.['email']">
             Invalid email format.
           </div>
-          <div class="invalid-feedback" *ngFor="let msg of formErrors['email']">
+          <div class="invalid-feedback" *ngFor="let msg of formErrors['Email']">
             {{ msg }} 
+          </div>
+        </div>
+
+        <!-- Phone Number Field -->
+        <div class="mb-3">
+          <label for="phoneNumber" class="form-label fw-semibold">Phone Number</label>
+          <input
+            type="tel"
+            id="phoneNumber"
+            formControlName="phoneNumber"
+            class="form-control"
+            [ngClass]="{
+              'is-invalid': 
+                (registerForm.get('phoneNumber')?.invalid && registerForm.get('phoneNumber')?.touched) 
+                || formErrors['PhoneNumber']
+            }"
+            placeholder="e.g. +1234567890"
+          />
+          <div class="invalid-feedback" *ngIf="registerForm.get('phoneNumber')?.errors?.['required']">
+            Phone number is required.
+          </div>
+          <div class="invalid-feedback" *ngIf="registerForm.get('phoneNumber')?.errors?.['minlength']">
+            Must be at least 5 digits.
+          </div>
+          <div class="invalid-feedback" *ngIf="registerForm.get('phoneNumber')?.errors?.['maxlength']">
+            Must be no more than 20 digits.
+          </div>
+          <div class="invalid-feedback" *ngFor="let msg of formErrors['PhoneNumber']">
+            {{ msg }}
           </div>
         </div>
 

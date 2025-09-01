@@ -6,6 +6,7 @@ import { LoginRequest } from '../../models/LoginRequest';
 import { AuthService } from '../../../../core/services/auth.service';
 import { map, switchMap } from 'rxjs';
 import { CartService } from '../../../cart/services/cart.service';
+import { ApiError } from '../../../../core/models/ApiError';
 
 
 @Component({
@@ -62,7 +63,8 @@ export class LoginComponent implements OnInit {
           }
 
         },
-        error: (err) => {
+        error: (err:ApiError) => {
+          console.log(err);
           this.errorMessage = err.message;
         }
       });
