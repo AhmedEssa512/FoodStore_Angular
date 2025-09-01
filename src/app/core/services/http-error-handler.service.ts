@@ -1,6 +1,7 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { throwError } from 'rxjs';
+import { ApiError } from '../models/ApiError';
 
 @Injectable({
   providedIn: 'root'
@@ -23,41 +24,45 @@ export class HttpErrorHandlerService {
           case 400:
           if (apiError?.data && typeof apiError.data === 'object') {
             // Validation error from ModelState
-            return throwError(() => ({
+            return throwError(() : ApiError  => ({
               message: apiError.message || 'Validation failed',
               validationErrors: apiError.data
             }));
           }
 
           // Generic 400 error (like..business logic)
-          return throwError(() => ({
+          return throwError(() : ApiError  => ({
             message: apiError?.message || 'Invalid request.',
             validationErrors: null
           }));
   
           case 401:
-            errorMessage = 'Session expired. Please log in again.';
+            errorMessage = apiError.Message;
             break;
           case 403:
             errorMessage = 'You are not authorized to perform this action.';
             break;
           case 404:
-            errorMessage = 'Requested resource was not found.';
+            errorMessage = apiError.Message;
             break;
           case 500:
-            errorMessage = 'Server error. Please try again later.';
+            errorMessage = apiError.Message;
             break;
           default:
-            errorMessage = `An unexpected error occurred. Status: ${error.status}`;
+            errorMessage = `An unexpected error occurred.`;
             break;
         }
       
       }
     
 
-    console.error('Error occurred:', error); // untill implement logging
+    console.error('Error occurred:', error); 
+    return throwError((): ApiError  => ({
+      message: errorMessage,
+      status: error.status,
+      validationErrors: null,
+  }));
 
-    return throwError(() => new Error(errorMessage));
    }
   }
   
