@@ -47,7 +47,8 @@
             </button>
 
             <button *ngIf="order.status !== 'Delivered' && order.status !== 'Canceled'"
-                    class="btn btn-sm btn-outline-danger">
+                    class="btn btn-sm btn-outline-danger"
+                    (click)="updateStatus(order.id, 'Canceled')">
               Cancel
             </button>
 
