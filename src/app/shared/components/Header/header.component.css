@@ -1,11 +1,17 @@
-.search-button {
-  border: 1px solid #ccc;
-  background: transparent;
-  border-radius: 4px;
-  padding: 6px;
+form .form-control::placeholder {
+  color: #aaa;
+  font-style: italic;
 }
 
-.search-button:hover {
-  background: transparent;
-  border-color: #999;
+form .btn-primary:hover {
+  background-color: #0056b3; /* darker shade */
+}
+
+.nav-link.active,
+.user_link.active {
+  color: #ffc107 !important;
+}
+
+.nav-link:hover i {
+  color: #ffc107 !important;
 }

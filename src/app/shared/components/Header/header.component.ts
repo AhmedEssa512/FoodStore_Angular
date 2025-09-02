@@ -43,8 +43,12 @@ export class HeaderComponent {
   }
  }
 
- isAdmin$ = this.authService.currentUser$.pipe(
-    map(user => user?.roles?.includes('Admin') ?? false)
-  );
+//  isAdmin$ = this.authService.currentUser$.pipe(
+//     map(user => user?.roles?.includes('Admin') ?? false)
+//   );
+
+logout(){
+  this.authService.logout().subscribe();
+}
 
 }
