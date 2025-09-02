@@ -12,6 +12,8 @@ import { ProfileComponent } from './features/profile/components/profile/profile.
 import { ForgotPasswordComponent } from './features/auth/components/forgot-password/forgot-password.component';
 import { ResetPasswordComponent } from './features/auth/components/reset-password/reset-password.component';
 import { OrderDetailsComponent } from './features/order/components/order-details/order-details.component';
+import { AboutComponent } from './features/home/components/about/about.component';
+import { NotFoundComponent } from './shared/components/not-found/not-found.component';
 
 
 export const routes: Routes = [
@@ -19,9 +21,10 @@ export const routes: Routes = [
         path: '',
         component: MainLayoutComponent,
         children: [
-          { path: '', component: HomeComponent },
+          { path: '', redirectTo: 'home', pathMatch: 'full'},
           { path: 'home', component: HomeComponent },
           { path: 'menu', component: MenuComponent },
+          { path: 'about', component: AboutComponent },
           { path: 'cart', component: CartComponent },
           { path: 'shipping', component: ShippingFormComponent, canActivate: [authGuard] },
           { path: 'orders', component: OrderHistoryComponent, canActivate: [authGuard] },
@@ -48,7 +51,7 @@ export const routes: Routes = [
       },
 
       // Fallback
-     { path: '**', redirectTo: '' }
+     { path: '**', component: NotFoundComponent }
     
 
 ];
