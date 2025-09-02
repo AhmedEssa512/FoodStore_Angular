@@ -26,7 +26,7 @@ export class CartService {
     return this.authService.checkAuthStatus().pipe(
       map(result => result.isAuthenticated),
       switchMap(isAuth => isAuth ? this.backendCart.getCart() : this.guestCart.getCart()),
-      tap(cart => this.cartItemCount.next(cart.items.length)),
+      tap(cart => this.cartItemCount.next(this.calculateTotalCount(cart))),
     );
   }
 
