@@ -1,28 +1,33 @@
 <div class="profile-container" *ngIf="user$ | async as user; else loading">
   <div class="profile-card">
-    <h2>👤 My Profile</h2>
-
-    <div class="profile-field">
-      <label>Username:</label>
-      <span>{{ user.username || '—' }}</span>
+    
+    <!-- Avatar + Name -->
+    <div class="profile-header">
+      <div class="avatar">
+        {{ user.username?.charAt(0) | uppercase }}
+      </div>
+      <h2 class="username">{{ user.username }}</h2>
+      <p class="email">{{ user.email }}</p>
     </div>
 
-    <div class="profile-field">
-      <label>Email:</label>
-      <span>{{ user.email || '—' }}</span>
-    </div>
+    <hr />
 
-    <div class="profile-field">
-      <label>Roles:</label>
-      <ng-container *ngIf="user.roles?.length; else noRoles">
-        <div class="roles">
-          <span class="role-badge" *ngFor="let role of user.roles">{{ role }}</span>
-        </div>
-      </ng-container>
-      <ng-template #noRoles><span>None</span></ng-template>
-    </div>
+    <!-- Quick Links -->
+    <div class="profile-actions">
+      <a routerLink="/orders" class="action-link">
+        📦 My Orders
+      </a>
 
-    <button class="logout-btn" (click)="logout()">Logout</button>
+      <a *ngIf="authService.isAdmin$ | async"
+         routerLink="/admin/dashboard"
+         class="action-link">
+        ⚡ Admin Panel
+      </a>
+
+      <button (click)="logout()" class="logout-btn">
+        🚪 Logout
+      </button>
+    </div>
   </div>
 </div>
 

@@ -6,60 +6,75 @@
 
 .profile-card {
   background: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 16px;
   padding: 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  max-width: 400px;
   width: 100%;
-  max-width: 500px;
-  font-family: Arial, sans-serif;
+  text-align: center;
 }
 
-h2 {
+.profile-header {
   margin-bottom: 1.5rem;
-  color: #333;
 }
 
-.profile-field {
-  margin-bottom: 1rem;
-}
-
-.profile-field label {
+.avatar {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1rem;
+  border-radius: 50%;
+  background: #007bff;
+  color: #fff;
+  font-size: 2rem;
   font-weight: bold;
-  display: block;
-  margin-bottom: 0.25rem;
-  color: #555;
-}
-
-.profile-field span {
-  color: #333;
-}
-
-.roles {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  align-items: center;
+  justify-content: center;
 }
 
-.role-badge {
-  background-color: #1976d2;
-  color: white;
-  padding: 0.3rem 0.6rem;
-  border-radius: 6px;
-  font-size: 0.875rem;
+.username {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.email {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.profile-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.action-link,
+.logout-btn {
+  display: block;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  background: #f8f9fa;
+  border: none;
+  text-decoration: none;
+  color: #333;
+  font-size: 1rem;
+  transition: background 0.2s;
+  text-align: center;
+  cursor: pointer;
+}
+
+.action-link:hover,
+.logout-btn:hover {
+  background: #e9ecef;
 }
 
 .logout-btn {
-  margin-top: 1.5rem;
-  padding: 0.6rem 1.2rem;
-  background-color: #e53935;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+  background: #dc3545;
+  color: #fff;
 }
 
 .logout-btn:hover {
-  background-color: #c62828;
+  background: #c82333;
 }
