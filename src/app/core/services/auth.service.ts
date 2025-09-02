@@ -25,6 +25,10 @@ export class AuthService {
   private isRefreshing = false;
   private refreshTokenSubject = new BehaviorSubject<boolean>(false); 
 
+  public isAdmin$ = this.currentUser$.pipe(
+    map(user => !!user?.roles?.includes('Admin'))
+  );
+
   constructor(
      private http: HttpClient,
     ){}
