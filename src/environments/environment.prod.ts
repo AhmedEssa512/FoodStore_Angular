@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.example.com' // Your production API URL
+  apiUrl: 'https://foodstore.runasp.net/api' // Your production API URL
 };
