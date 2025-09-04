@@ -17,6 +17,7 @@ export class HeaderComponent {
   inHomePage: boolean = false; 
   searchQuery = '';
   cartItemCount$: Observable<number | 0>;
+  isMenuOpen = false;
 
   constructor(
     public authService: AuthService,
@@ -43,12 +44,12 @@ export class HeaderComponent {
   }
  }
 
-//  isAdmin$ = this.authService.currentUser$.pipe(
-//     map(user => user?.roles?.includes('Admin') ?? false)
-//   );
-
 logout(){
   this.authService.logout().subscribe();
 }
+
+closeMenu() {
+    this.isMenuOpen = false;
+  }
 
 }

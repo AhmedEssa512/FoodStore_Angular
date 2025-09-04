@@ -12,46 +12,66 @@
               A
             </span>
           </a>
-<!-- 
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+
+          <!-- <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class=""> </span>
           </button> -->
+          <button 
+            class="navbar-toggler" 
+            type="button" 
+            (click)="isMenuOpen = !isMenuOpen" 
+            aria-controls="navbarSupportedContent"
+            [attr.aria-expanded]="isMenuOpen"
+            aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
 
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <div class="collapse navbar-collapse" 
+            [ngClass]="{ 'show': isMenuOpen }"
+            id="navbarSupportedContent">
+
             <ul class="navbar-nav  mx-auto ">
               <li class="nav-item">
+
                 <a class="nav-link" 
                 routerLink="/home"
                 routerLinkActive="active" 
                 [routerLinkActiveOptions]="{ exact: true }"
+                (click)="closeMenu()"
                 >
                   Home
                 </a>
               </li>
               <li class="nav-item">
+
                 <a class="nav-link" 
                 routerLink="/menu"
                 routerLinkActive="active" 
                 [routerLinkActiveOptions]="{ exact: true }"
+                (click)="closeMenu()"
                 >
                   Menu
                 </a>
               </li>
               <li class="nav-item">
+
                 <a class="nav-link" 
                 routerLink="/about"
                 routerLinkActive="active" 
                 [routerLinkActiveOptions]="{ exact: true }"
+                (click)="closeMenu()"
                 >
                   About
                 </a>
               </li>
             </ul>
             <div class="user_option">
+
               <a class="user_link" 
               routerLink="/profile"
               routerLinkActive="active" 
               [routerLinkActiveOptions]="{ exact: true }"
+              (click)="closeMenu()"
               >
                 <i class="fa fa-user" aria-hidden="true"></i>
               </a>
@@ -59,6 +79,7 @@
                   routerLink="/cart"
                   routerLinkActive="active" 
                   [routerLinkActiveOptions]="{ exact: true }"
+                  (click)="closeMenu()"
                   >
                     <i class="bi-cart-fill fs-4 text-white"></i>
                     <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger text-white">
