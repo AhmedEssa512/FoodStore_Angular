@@ -14,11 +14,8 @@ export class AdminNavComponent {
 
   isMessagesOpen = false;
   isNotificationsOpen = false;
+  isNavOpen = false;
 
-  toggleSearch() {
-    console.log('Search button clicked');
-
-  }
 
    onToggleClick() {
     this.sidebarToggle.emit();

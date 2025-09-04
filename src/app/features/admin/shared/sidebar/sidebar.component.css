@@ -6,3 +6,19 @@
 .nav-link:hover {
   background-color: rgba(255, 255, 255, 0.1);
 }
+
+
+aside {
+  width: 250px;
+  transition: transform 0.3s ease;
+}
+
+aside.collapsed {
+  transform: translateX(-100%);
+}
+
+@media (min-width: 992px) { /* lg and up: always visible */
+  aside {
+    transform: none !important;
+  }
+}

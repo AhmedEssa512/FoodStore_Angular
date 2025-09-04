@@ -1,29 +1,31 @@
 .small-box {
-  border-radius: 0.25rem;
-  box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+  border-radius: 0.5rem;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
   display: block;
-  margin-bottom: 20px;
   position: relative;
+  overflow: hidden; 
+  background: #fff; 
 }
 
 .small-box > .inner {
-  padding: 10px;
+  padding: 15px;
 }
 
 .small-box h3 {
-  font-size: 2.2rem;
+  font-size: 2rem;
   font-weight: bold;
   margin: 0 0 10px 0;
-  white-space: nowrap;
   padding: 0;
+  line-height: 1.2;
 }
 
 .small-box p {
   font-size: 1rem;
+  margin-bottom: 0;
 }
 
 .small-box .icon {
-  color: rgba(0,0,0,0.15);
+  color: rgba(0, 0, 0, 0.15);
   position: absolute;
   top: 15px;
   right: 10px;
@@ -38,10 +40,45 @@
 
 .small-box-footer {
   display: block;
-  padding: 5px 0;
+  padding: 8px 0;
   position: relative;
   text-align: center;
   text-decoration: none;
+  font-weight: 500;
   z-index: 10;
+  opacity: 0.9;
+}
+
+.small-box-footer:hover {
+  opacity: 1;
+  text-decoration: underline;
+}
+
+/* 🔹 Tablet screens (<= 768px) */
+@media (max-width: 768px) {
+  .small-box .icon {
+    font-size: 45px;
+    top: 10px;
+  }
+
+  .small-box h3 {
+    font-size: 1.6rem;
+  }
+}
+
+/* 🔹 Mobile screens (<= 576px) */
+@media (max-width: 576px) {
+  .small-box .icon {
+    font-size: 40px;
+    top: 8px;
+  }
+
+  .small-box h3 {
+    font-size: 1.4rem;
+  }
+
+  .small-box p {
+    font-size: 0.9rem;
+  }
 }
 

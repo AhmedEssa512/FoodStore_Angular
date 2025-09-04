@@ -1,4 +1,67 @@
 <div class="row g-3" *ngIf="stats$ | async as stats">
+  <div class="col-lg-3 col-md-6 col-12">
+    <div class="small-box bg-info text-white h-100">
+      <div class="inner">
+        <h3>{{ stats.totalOrders }}</h3>
+        <p>Orders</p>
+      </div>
+      <div class="icon">
+        <i class="bi bi-bag-fill"></i>
+      </div>
+      <a href="#" class="small-box-footer text-white">
+        More info <i class="bi bi-arrow-right-circle-fill"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-6 col-12">
+    <div class="small-box bg-success text-white">
+      <div class="inner">
+        <h3>{{ stats.totalSales }}</h3>
+        <p>Sales</p>
+      </div>
+      <div class="icon">
+        <i class="bi bi-bar-chart-fill"></i>
+      </div>
+      <a href="#" class="small-box-footer text-white">
+        More info <i class="bi bi-arrow-right-circle-fill"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-6 col-12">
+    <div class="small-box bg-warning text-white">
+      <div class="inner">
+        <h3>{{ stats.totalCustomers }}</h3>
+        <p>Customers</p>
+      </div>
+      <div class="icon">
+        <i class="bi bi-person-plus-fill"></i>
+      </div>
+      <a href="#" class="small-box-footer text-dark">
+        More info <i class="bi bi-arrow-right-circle-fill"></i>
+      </a>
+    </div>
+  </div>
+
+  <div class="col-lg-3 col-md-6 col-12">
+    <div class="small-box bg-danger text-white">
+      <div class="inner">
+        <h3>{{ stats.totalFoods }}</h3>
+        <p>Foods</p>
+      </div>
+      <div class="icon">
+        <i class="bi bi-pie-chart-fill"></i>
+      </div>
+      <a href="#" class="small-box-footer text-white">
+        More info <i class="bi bi-arrow-right-circle-fill"></i>
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<!-- <div class="row g-3" *ngIf="stats$ | async as stats">
  <div class="col-lg-3 col-6">
       <div class="small-box bg-info text-white">
         <div class="inner">
@@ -58,4 +121,4 @@
         </a>
       </div>
     </div>
-  </div>
+  </div> -->
