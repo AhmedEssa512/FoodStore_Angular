@@ -30,7 +30,7 @@ deleteItem(itemId: number): Observable<void> {
 }
 
 updateItem(cartItem: CartItem): Observable<void> {
-  return this.http.patch<void>(`${this.apiUrl}/cart/items/${cartItem.id}`, cartItem.quantity);
+  return this.http.patch<void>(`${this.apiUrl}/cart/items/${cartItem.id}`, { quantity: cartItem.quantity } );
 }
 
 mergeGuestCart(guestCart: CartRequest[]): Observable<void> {
