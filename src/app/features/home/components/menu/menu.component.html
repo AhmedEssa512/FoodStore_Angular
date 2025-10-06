@@ -25,12 +25,17 @@
       <div class="filters-content">
         <div class="row grid">
           <div class="col-sm-6 col-lg-4 all pizza" *ngFor="let Food of foodList">
-            <app-food [food]="Food"></app-food>
+            <app-food [food]="Food" (viewDetails)="onViewDetails($event)"></app-food>
           </div>
         </div>
       </div>
 
-                                  
+           <!-- Modal -->
+    <app-food-details 
+    [food]="selectedFood"
+    [isOpen]="isModalOpen"
+    (closed)="onModalClosed()">
+    ></app-food-details>                       
           <!-- Pagination -->
       <app-pagination
         [pageNumber]="pagination.pageNumber"

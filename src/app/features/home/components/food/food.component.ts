@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Food } from '../../models/Food';
 import { CartService } from '../../../cart/services/cart.service';
 import { CartRequest } from '../../../cart/models/CartRequest';
@@ -14,6 +14,8 @@ import { CartRequest } from '../../../cart/models/CartRequest';
 export class FoodComponent {
   @Input() food: any | undefined;
 
+  @Output() viewDetails = new EventEmitter<Food>();
+
   constructor(private cartService:CartService){}
 
   addToCart()
@@ -25,4 +27,9 @@ export class FoodComponent {
     console.log(item.foodId);
     this.cartService.addToCart(item).subscribe();
   }
+
+  openDetails() {
+    this.viewDetails.emit(this.food);
+  }
+
 }

@@ -25,3 +25,27 @@
     fill: currentColor; /* use text color */
   }
 }
+
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 8px;
+  cursor: pointer;
+  color: #333;
+  transition: color 0.2s ease;
+}
+
+.icon-button:hover {
+  color: #007bff;
+}
+
+.bi-eye {
+  font-size: 1.4rem;   /* a little bigger */
+  color: white;         /* match your theme */
+  vertical-align: middle;
+}
+
+a {
+  cursor: pointer;
+}

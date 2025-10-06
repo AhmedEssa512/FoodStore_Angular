@@ -14,6 +14,7 @@ import { ResetPasswordComponent } from './features/auth/components/reset-passwor
 import { OrderDetailsComponent } from './features/order/components/order-details/order-details.component';
 import { AboutComponent } from './features/home/components/about/about.component';
 import { NotFoundComponent } from './shared/components/not-found/not-found.component';
+import { FoodDetailsComponent } from './features/home/components/food-details/food-details.component';
 
 
 export const routes: Routes = [
@@ -26,6 +27,7 @@ export const routes: Routes = [
           { path: 'menu', component: MenuComponent },
           { path: 'about', component: AboutComponent },
           { path: 'cart', component: CartComponent },
+          { path: 'details', component: FoodDetailsComponent },
           { path: 'shipping', component: ShippingFormComponent, canActivate: [authGuard] },
           { path: 'orders', component: OrderHistoryComponent, canActivate: [authGuard] },
           { path: 'orders/:id', component: OrderDetailsComponent, canActivate: [authGuard]},

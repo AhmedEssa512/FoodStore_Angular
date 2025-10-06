@@ -9,11 +9,12 @@ import { PaginatedResponse } from '../../../../shared/models/paginated-response.
 import { ActivatedRoute } from '@angular/router';
 import { PaginationComponent } from "../../../../shared/components/pagination/pagination.component";
 import { Category } from '../../../../shared/models/Category';
+import { FoodDetailsComponent } from "../food-details/food-details.component";
 
 @Component({
   selector: 'app-menu',
   standalone: true,
-  imports: [FoodComponent, CommonModule, HttpClientModule, PaginationComponent],
+  imports: [FoodComponent, CommonModule, HttpClientModule, PaginationComponent, FoodDetailsComponent],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css'
 })
@@ -32,6 +33,8 @@ export class MenuComponent implements OnInit {
     errorMessage = '';
     selectedCategoryId: number | null = null;
     searchQuery: string | null = null;
+    selectedFood: Food | null = null;
+    isModalOpen = false;
 
     constructor(private _foodService :FoodService, private _categoryService :CategoryService, private route: ActivatedRoute ) {}
 
@@ -101,6 +104,16 @@ onPageChange(page: number): void {
   if (page < 1 || page > this.pagination.totalPages) return;
   this.pagination.pageNumber = page;
   this.loadFoods();
+}
+
+onViewDetails(food: Food) {
+    this.selectedFood = food;
+    this.isModalOpen = true;
+  }
+
+  onModalClosed() {
+  this.isModalOpen = false;
+  this.selectedFood = null;
 }
 
   

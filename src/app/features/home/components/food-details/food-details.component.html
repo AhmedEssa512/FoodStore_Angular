@@ -1,0 +1,35 @@
+<div class="modal fade" [class.show]="isOpen" [style.display]="isOpen ? 'block' : 'none'" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      
+      <!-- Header -->
+      <div class="modal-header">
+        <h5 class="modal-title">{{ food?.name }}</h5>
+        <button type="button" class="btn-close" (click)="close()"></button>
+      </div>
+
+      <!-- Body -->
+      <div class="modal-body">
+        <div class="row">
+          <div class="col-md-5">
+            <img [src]="food?.imageUrl" [alt]="food?.name" class="img-fluid rounded">
+          </div>
+          <div class="col-md-7">
+            <p>{{ food?.description }}</p>
+            <h4 class="text-success">${{ food?.price }}</h4>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary" (click)="close()">Close</button>
+        <button type="button" class="btn btn-success" (click)="addToCart()">Add to Cart</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Backdrop -->
+<div class="modal-backdrop fade show" *ngIf="isOpen"></div>
