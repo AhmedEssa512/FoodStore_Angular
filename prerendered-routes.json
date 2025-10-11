@@ -1,0 +1,25 @@
+{
+  "routes": [
+    "/",
+    "/about",
+    "/account",
+    "/account/orders",
+    "/account/profile",
+    "/account/shipping",
+    "/admin",
+    "/admin/customers",
+    "/admin/dashboard",
+    "/admin/orders",
+    "/admin/products",
+    "/admin/products/create",
+    "/admin/reports",
+    "/cart",
+    "/details",
+    "/forgot-password",
+    "/home",
+    "/login",
+    "/menu",
+    "/register",
+    "/reset-password"
+  ]
+}
