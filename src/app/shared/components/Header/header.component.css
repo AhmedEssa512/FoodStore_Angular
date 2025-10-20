@@ -12,6 +12,14 @@ form .btn-primary:hover {
   color: #ffc107 !important;
 }
 
+/* default (inactive) color */
+.nav-link i {
+  color: white;
+}
+
+.nav-link.active i {
+  color: #ffc107 !important;
+}
 .nav-link:hover i {
   color: #ffc107 !important;
 }

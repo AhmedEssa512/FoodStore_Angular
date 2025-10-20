@@ -16,7 +16,7 @@ import { CartService } from '../../../features/cart/services/cart.service';
 export class HeaderComponent {
   inHomePage: boolean = false; 
   searchQuery = '';
-  cartItemCount$: Observable<number | 0>;
+  cartItemCount$ = this.cartService.cartItemCount$;
   isMenuOpen = false;
 
   constructor(
@@ -32,8 +32,7 @@ export class HeaderComponent {
         this.inHomePage = currentUrl === '/' || currentUrl === '/home';
       });
 
-      this.cartItemCount$ = this.cartService.cartItemCount$;
-      console.log("cartItemCount: "+ this.cartItemCount$);
+       this.cartService.cartItemCount$.subscribe(c => console.log('Cart count in header:', c));
   }
 
 

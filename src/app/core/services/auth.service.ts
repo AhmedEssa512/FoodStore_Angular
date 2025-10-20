@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, catchError, filter, finalize, map, mapTo, Observable, of, switchMap, take, tap } from 'rxjs';
+import { BehaviorSubject, catchError, filter, finalize, map, mapTo, Observable, of, switchMap, take, tap, throwError } from 'rxjs';
 import { LoginRequest } from '../../features/auth/models/LoginRequest';
 import { RegisterRequest } from '../../features/auth/models/RegisterRequest';
 import { User } from '../../features/profile/models/User';
@@ -92,36 +92,102 @@ export class AuthService {
 }
 
 
-   checkAuthStatus(): Observable<{ isAuthenticated: boolean }> {
-    return this.http.get<boolean>(`${this.apiUrl}/is-authenticated`).pipe(
+  //  checkAuthStatus(): Observable<{ isAuthenticated: boolean }> {
+  //   return this.http.get<boolean>(`${this.apiUrl}/is-authenticated`).pipe(
+  //   map(isAuth => ({ isAuthenticated: isAuth })),
+  //   catchError(error => {
+  //     console.warn('Auth check failed:', error);
+  //     return of({ isAuthenticated: false });
+  //   })
+  //  );
+  // }
+
+  checkAuthStatus(): Observable<{ isAuthenticated: boolean }> {
+  return this.http.get<boolean>(`${this.apiUrl}/is-authenticated`).pipe(
     map(isAuth => ({ isAuthenticated: isAuth })),
-    catchError(error => {
-      console.warn('Auth check failed:', error);
-      return of({ isAuthenticated: false });
+    catchError((error: HttpErrorResponse) => {
+      if (error.status === 0) {
+        console.warn('Network issue during auth check:', error);
+        return of({ isAuthenticated: false });
+      }
+      // rethrow other errors (e.g., 401) so interceptor can refresh
+      console.warn('Re-throwing error for interceptor:', error);
+      return throwError(() => error);
     })
-   );
-  }
+  );
+}
 
 
+
+
+// initializeLoginStatus(): Observable<void> {
+
+//   this.isLoggedInSubject.next(false);
+//   this.currentUserSubject.next(null);
+
+//   return this.checkAuthStatus().pipe(
+//     switchMap(res => {
+//       this.isLoggedInSubject.next(res.isAuthenticated);
+
+//       if (res.isAuthenticated) {
+//         return this.getCurrentUser().pipe(
+//           tap(user => this.currentUserSubject.next(user)),
+//           mapTo(void 0)
+//         );
+//       }
+
+//       this.currentUserSubject.next(null);
+//       return of(void 0);
+//     }),
+//     catchError(err => {
+//       console.warn('Initialize login status failed:', err);
+//       this.isLoggedInSubject.next(false);
+//       this.currentUserSubject.next(null);
+//       return of(void 0);
+//     })
+//   );
+// }
 
 initializeLoginStatus(): Observable<void> {
+  // Reset initially
+  this.isLoggedInSubject.next(false);
+  this.currentUserSubject.next(null);
+
   return this.checkAuthStatus().pipe(
     switchMap(res => {
-      console.log(res +" res.isauth"+ res.isAuthenticated);
-      this.isLoggedInSubject.next(res.isAuthenticated);
-
       if (res.isAuthenticated) {
+        this.isLoggedInSubject.next(true);
         return this.getCurrentUser().pipe(
           tap(user => this.currentUserSubject.next(user)),
           mapTo(void 0)
         );
-      } else {
-        this.currentUserSubject.next(null);
-        return of(void 0);
       }
+
+      // Not authenticated — but maybe refresh can fix that
+      return this.refreshToken().pipe(
+        switchMap(() => this.getCurrentUser()),
+        tap(user => {
+          this.isLoggedInSubject.next(true);
+          this.currentUserSubject.next(user);
+        }),
+        catchError(() => {
+          // Refresh failed, continue as guest
+          this.isLoggedInSubject.next(false);
+          this.currentUserSubject.next(null);
+          return of(void 0);
+        }),
+        mapTo(void 0)
+      );
+    }),
+    catchError(err => {
+      console.warn('Initialize login status failed:', err);
+      this.isLoggedInSubject.next(false);
+      this.currentUserSubject.next(null);
+      return of(void 0);
     })
   );
 }
+
 
 
   isLoggedIn(): boolean  {

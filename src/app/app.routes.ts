@@ -3,14 +3,10 @@ import { MainLayoutComponent } from './layouts/main-layout/main-layout.component
 import { HomeComponent } from './features/home/components/home/home.component';
 import { MenuComponent } from './features/home/components/menu/menu.component';
 import { CartComponent } from './features/cart/components/cart/cart.component';
-import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component';
 import { ShippingFormComponent } from './features/order/components/shipping-form/shipping-form.component';
 import { authGuard } from './core/guards/auth.guard';
 import { OrderHistoryComponent } from './features/order/components/order-history/order-history.component';
-import { RegisterComponent } from './features/auth/components/register/register.component';
 import { ProfileComponent } from './features/profile/components/profile/profile.component';
-import { ForgotPasswordComponent } from './features/auth/components/forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from './features/auth/components/reset-password/reset-password.component';
 import { OrderDetailsComponent } from './features/order/components/order-details/order-details.component';
 import { AboutComponent } from './features/home/components/about/about.component';
 import { NotFoundComponent } from './shared/components/not-found/not-found.component';
@@ -18,42 +14,46 @@ import { FoodDetailsComponent } from './features/home/components/food-details/fo
 
 
 export const routes: Routes = [
-    {
-        path: '',
-        component: MainLayoutComponent,
-        children: [
-          { path: '', redirectTo: 'home', pathMatch: 'full'},
-          { path: 'home', component: HomeComponent },
-          { path: 'menu', component: MenuComponent },
-          { path: 'about', component: AboutComponent },
-          { path: 'cart', component: CartComponent },
-          { path: 'details', component: FoodDetailsComponent },
-          { path: 'shipping', component: ShippingFormComponent, canActivate: [authGuard] },
-          { path: 'orders', component: OrderHistoryComponent, canActivate: [authGuard] },
-          { path: 'orders/:id', component: OrderDetailsComponent, canActivate: [authGuard]},
-          { path: 'profile', component: ProfileComponent, canActivate: [authGuard]},
-        ],
-      },
+  // Main layout
+  {
+    path: '',
+    component: MainLayoutComponent,
+    children: [
+      { path: '', redirectTo: 'home', pathMatch: 'full' },
+      { path: 'home', component: HomeComponent },
+      { path: 'menu', component: MenuComponent },
+      { path: 'about', component: AboutComponent },
+      { path: 'cart', component: CartComponent },
+      { path: 'details', component: FoodDetailsComponent },
 
+      // Protected routes 
       {
         path: '',
-        component: AuthLayoutComponent,
+        canActivateChild: [authGuard],
         children: [
-          { path: 'login', loadComponent: () => import('./features/auth/components/login/login.component').then(m => m.LoginComponent)},
-          { path: 'register', component: RegisterComponent },
-          { path: 'forgot-password', component: ForgotPasswordComponent },
-          { path: 'reset-password', component: ResetPasswordComponent },
+          { path: 'shipping', component: ShippingFormComponent },
+          { path: 'orders', component: OrderHistoryComponent },
+          { path: 'orders/:id', component: OrderDetailsComponent },
+          { path: 'profile', component: ProfileComponent },
         ],
       },
+    ],
+  },
 
-      // Admin
-      {
-        path: 'admin',
-        loadChildren: () => import('./features/admin/admin.routes').then(m => m.ADMIN_ROUTES)
-      },
+  // Lazy-loaded Auth layout
+  {
+    path: 'auth',
+    loadChildren: () =>
+      import('./features/auth/auth.routes').then((m) => m.AUTH_ROUTES),
+  },
 
-      // Fallback
-     { path: '**', component: NotFoundComponent }
-    
+  // Lazy-loaded Admin area
+  {
+    path: 'admin',
+    loadChildren: () =>
+      import('./features/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
+  },
 
+  // Fallback
+  { path: '**', component: NotFoundComponent },
 ];

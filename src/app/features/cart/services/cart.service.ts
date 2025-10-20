@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, switchMap, tap } from 'rxjs';
+import { BehaviorSubject, catchError, filter, map, Observable, of, switchMap, take, tap } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
 import { CartItem } from '../models/CartItem';
 import { CartRequest } from '../models/CartRequest';
@@ -23,12 +23,13 @@ export class CartService {
 
 
   getCart(): Observable<Cart> {
-    return this.authService.checkAuthStatus().pipe(
-      map(result => result.isAuthenticated),
-      switchMap(isAuth => isAuth ? this.backendCart.getCart() : this.guestCart.getCart()),
-      tap(cart => this.cartItemCount.next(this.calculateTotalCount(cart))),
-    );
-  }
+  return this.authService.isLoggedIn$.pipe(
+    filter((isLoggedIn): isLoggedIn is boolean => isLoggedIn !== null), // wait until initialized
+    take(1), // only need the current value once
+    switchMap(isAuth => isAuth ? this.backendCart.getCart() : this.guestCart.getCart()),
+    tap(cart => this.cartItemCount.next(this.calculateTotalCount(cart)))
+  );
+}
 
 
   addToCart(item: CartRequest): Observable<void> {
@@ -72,17 +73,25 @@ export class CartService {
 
   loadInitialCart(): Observable<void> {
   return this.authService.checkAuthStatus().pipe(
-    switchMap(res => res.isAuthenticated ? this.backendCart.getCart() : this.guestCart.getCart()),
+    catchError(err => {
+      // Continue as guest 
+      return of({ isAuthenticated: false });
+    }),
+    switchMap(res =>
+      res.isAuthenticated
+        ? this.backendCart.getCart()
+        : this.guestCart.getCart()
+    ),
     tap(cart => {
-      this.cartItemCount.next(this.calculateTotalCount(cart));
+      this.cartItemCount.next(this.calculateTotalCount(cart))
     }),
     map(() => void 0)
   );
 }
 
+
 private calculateTotalCount(cart: Cart): number {
   return cart.items.reduce((sum, item) => sum + item.quantity, 0);
 }
-
 
 }

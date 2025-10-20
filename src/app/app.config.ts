@@ -7,20 +7,20 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { loaderInterceptor } from './core/interceptors/loader.interceptor';
 import { AuthService } from './core/services/auth.service';
-import { CartService } from './features/cart/services/cart.service';
-import { firstValueFrom, switchMap } from 'rxjs';
+import { lastValueFrom} from 'rxjs';
 import { httpErrorInterceptor } from './core/interceptors/http-error.interceptor';
 import { unwrapApiResponseInterceptor } from './core/interceptors/unwrap-api-response.interceptor';
 
-export function appInitializer() {
-  const authService = inject(AuthService);
-  const cartService = inject(CartService);
+export function initializeApp(authService: AuthService) {
+  return async () => {
+    if (typeof window === 'undefined') return;
 
-  return () => firstValueFrom(
-    authService.initializeLoginStatus().pipe(
-      switchMap(() => cartService.loadInitialCart())
-    )
-  );
+    try {
+      await lastValueFrom(authService.initializeLoginStatus());
+    } catch (err) {
+      console.warn('Startup auth check failed (maybe refresh triggered):', err);
+    }
+  };
 }
 
 export const appConfig: ApplicationConfig = {
@@ -35,10 +35,12 @@ export const appConfig: ApplicationConfig = {
     ])
   ),
     provideAnimations(),
-    {
+     {
       provide: APP_INITIALIZER,
-      useFactory: appInitializer,
-      multi: true
-    }
+      useFactory: initializeApp,
+      deps: [AuthService],
+      multi: true,
+     }
+
   ]
 };

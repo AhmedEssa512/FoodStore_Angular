@@ -11,6 +11,11 @@ export class HttpErrorHandlerService {
    constructor() { }
 
   handleError(error: HttpErrorResponse) {
+    // Skip handling 401s — let authInterceptor refresh the token
+    if (error.status === 401) {
+      return throwError(() => error);
+    }
+
     let errorMessage = 'An unexpected error occurred. Please try again.';
     const apiError = error.error;
 
@@ -36,9 +41,6 @@ export class HttpErrorHandlerService {
             validationErrors: null
           }));
   
-          case 401:
-            errorMessage = apiError.Message;
-            break;
           case 403:
             errorMessage = 'You are not authorized to perform this action.';
             break;
