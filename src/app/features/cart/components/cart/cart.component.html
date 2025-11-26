@@ -1,102 +1,126 @@
-<div class="test">
- <div class="container">
+<div class="container mt-4">
     <div class="row" *ngIf="cart && !loading; else loadingOrError">
-        <aside class="col-lg-9">
-            <div class="card">
-                <div class="table-responsive">
-                    <table class="table table-borderless table-shopping-cart">
-                        <thead class="text-muted">
-                            <tr class="small text-uppercase">
-                                <th scope="col">Food</th>
-                                <th scope="col" width="120">Quantity</th>
-                                <th scope="col" width="120">Price</th>
-                                <th scope="col" class="text-right d-none d-md-block d-block" width="200"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let item of cart!.items" >
-                                <td>
-                                    <figure class="itemside align-items-center">
-                                        <div class="aside"><img [src]="item.food.imageUrl" [alt]="item.food.name" class="img-sm"></div>
-                                        <figcaption class="info">
-                                            <a href="#" class="title text-dark" data-abc="true">{{ item.food.name }}</a>
-                                            <p class="text-muted small">{{ item.food.description }}</p>
-                                        </figcaption>
-                                    </figure>
-                                </td>
-                                <td>
-                                    <select class="form-control" [ngModel]="item.quantity" (ngModelChange)="onQuantityChange(item, $event)">
-                                        <option *ngFor="let qty of [1,2,3,4,5]" [value]="qty">{{ qty }}</option>
-                                    </select>
-                                </td>
-                                <td>
-                                    <div class="price-wrap">
-                                        <var class="price">${{ item.food.price * item.quantity }}</var>
-                                        <small class="text-muted">${{ item.price }} each</small> 
-                                    </div>
-                                </td>
-                                <td class="text-right d-md-block d-block">
-                                    <button (click)="deleteItem(item)" class="btn btn-light">Delete</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+        
+        <aside class="col-lg-9 mb-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-body">
+                    
+                    <div class="row border-bottom pb-2 mb-3 d-none d-md-flex text-muted text-uppercase small">
+                        <div class="col-md-6">Food</div>
+                        <div class="col-md-2">Quantity</div>
+                        <div class="col-md-2">Price</div>
+                        <div class="col-md-2 text-right">Actions</div>
+                    </div>
+
+                    <div class="row border-bottom py-3 align-items-center" *ngFor="let item of cart!.items">
+                        
+                        <div class="col-12 col-md-6 mb-3 mb-md-0">
+                            <figure class="media mb-0 d-flex align-items-center">
+                                <div class="img-wrap mr-3" style="margin-right: 15px;">
+                                    <img [src]="item.food.imageUrl" [alt]="item.food.name" class="img-sm rounded border">
+                                </div>
+                                <div class="media-body">
+                                    <a href="#" class="title text-dark font-weight-bold h6 d-block mb-1" data-abc="true">{{ item.food.name }}</a>
+                                    <p class="text-muted small mb-0">{{ item.food.description }}</p>
+                                </div>
+                            </figure>
+                        </div>
+
+                        <div class="col-6 col-md-2">
+                            <label class="d-md-none text-muted small">Qty:</label>
+                            <select class="form-control" [ngModel]="item.quantity" (ngModelChange)="onQuantityChange(item, $event)">
+                                <option *ngFor="let qty of [1,2,3,4,5]" [value]="qty">{{ qty }}</option>
+                            </select>
+                        </div>
+
+
+                        <div class="col-6 col-md-2">
+                            <label class="d-md-none text-muted small">Price:</label>
+                            <div class="price-wrap">
+                                <var class="price h6 font-weight-bold d-block mb-0">${{ item.food.price * item.quantity }}</var>
+                                <small class="text-muted d-block">${{ item.price }} / per</small> 
+                            </div>
+                        </div>
+
+
+                        <div class="col-12 col-md-2 text-right mt-3 mt-md-0">
+                            <button (click)="deleteItem(item)" class="btn btn-outline-danger btn-sm w-100 w-md-auto">
+                                <i class="fa fa-trash"></i> Remove
+                            </button>
+                        </div>
+
+                    </div> <!-- End Row -->
+
+                    <!-- Empty Cart Message -->
+                    <div *ngIf="cart.items.length === 0" class="text-center py-5">
+                        <h5 class="text-muted">Your cart is currently empty.</h5>
+                    </div>
+
                 </div>
             </div>
         </aside>
+
+
         <aside class="col-lg-3">
-            <div class="card mb-3">
+            <div class="card mb-3 shadow-sm border-0">
                 <div class="card-body">
                     <form>
                         <div class="form-group"> <label>Have coupon?</label>
-                            <div class="input-group"> <input type="text" class="form-control coupon" name="" placeholder="Coupon code"> <span class="input-group-append"> <button class="btn btn-primary btn-apply coupon">Apply</button> </span> </div>
+                            <div class="input-group"> 
+                                <input type="text" class="form-control coupon" name="" placeholder="Coupon code"> 
+                                <div class="input-group-append"> 
+                                    <button class="btn btn-primary btn-apply coupon">Apply</button> 
+                                </div> 
+                            </div>
                         </div>
                     </form>
                 </div>
             </div>
-            <div class="card">
+            
+            <div class="card shadow-sm border-0">
                 <div class="card-body">
-                    <dl class="dlist-align">
+                    <dl class="dlist-align d-flex justify-content-between">
                         <dt>Total price:</dt>
-                        <dd class="text-right ml-3">${{ getTotal() }}</dd>
+                        <dd class="text-right">${{ getTotal() }}</dd>
                     </dl>
-                    <dl class="dlist-align">
+                    <dl class="dlist-align d-flex justify-content-between">
                         <dt>Discount:</dt>
-                        <dd class="text-right text-danger ml-3">- $0.00</dd>
+                        <dd class="text-right text-danger">- $0.00</dd>
                     </dl>
-                    <dl class="dlist-align">
+                    <hr>
+                    <dl class="dlist-align d-flex justify-content-between">
                         <dt>Total:</dt>
-                        <dd class="text-right text-dark b ml-3">
+                        <dd class="text-right text-dark b">
                             <strong>${{ getTotal() }}</strong>
                         </dd>
                     </dl>
                     <hr> 
-                    <!-- <a href="#" class="btn btn-out btn-primary btn-square btn-main" data-abc="true"> Make Purchase </a>  -->
-                     <button
+                    <button
                        type="button"
-                       class="btn btn-out btn-primary btn-square btn-main"
+                       class="btn btn-primary btn-block mb-2"
                        routerLink="/shipping"
-                       [disabled]="cart.items.length == 0"
-                      >
+                       [disabled]="cart.items.length == 0">
                        Make Purchase
                     </button>
                     <button 
                      type="button" 
-                     class="btn btn-out btn-success btn-square btn-main mt-2" 
-                     routerLink="/home"
-                     >Continue Shopping
+                     class="btn btn-outline-success btn-block" 
+                     routerLink="/home">
+                     Continue Shopping
                     </button>
                 </div>
             </div>
         </aside>
     </div>
  </div>
-</div>
 
-
-<ng-template #loadingOrError>
+ <!-- Loading / Error Template -->
+ <ng-template #loadingOrError>
     <div class="container text-center mt-5">
-      <div *ngIf="loading">Loading your cart...</div>
+      <div *ngIf="loading" class="spinner-border text-primary" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+      <div *ngIf="loading" class="mt-2">Loading your cart...</div>
       <div *ngIf="!loading && errorMessage" class="text-danger">{{ errorMessage }}</div>
     </div>
 </ng-template>
