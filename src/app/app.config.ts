@@ -18,7 +18,7 @@ export function initializeApp(authService: AuthService) {
     try {
       await lastValueFrom(authService.initializeLoginStatus());
     } catch (err) {
-      console.warn('Startup auth check failed (maybe refresh triggered):', err);
+      console.warn('Startup auth check failed', err);
     }
   };
 }

@@ -71,7 +71,6 @@ export class MenuComponent implements OnInit {
       this._categoryService.getCategories().subscribe({
         next: (data) => {
           this.categories = data;
-          console.log('Categories:', data);
         },
         error: (err) => {
           this.errorMessage = 'Failed to load categories';

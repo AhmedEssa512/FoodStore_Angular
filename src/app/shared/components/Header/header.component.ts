@@ -32,7 +32,7 @@ export class HeaderComponent {
         this.inHomePage = currentUrl === '/' || currentUrl === '/home';
       });
 
-       this.cartService.cartItemCount$.subscribe(c => console.log('Cart count in header:', c));
+       this.cartService.cartItemCount$.subscribe(); 
   }
 
 

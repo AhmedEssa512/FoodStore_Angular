@@ -92,16 +92,6 @@ export class AuthService {
 }
 
 
-  //  checkAuthStatus(): Observable<{ isAuthenticated: boolean }> {
-  //   return this.http.get<boolean>(`${this.apiUrl}/is-authenticated`).pipe(
-  //   map(isAuth => ({ isAuthenticated: isAuth })),
-  //   catchError(error => {
-  //     console.warn('Auth check failed:', error);
-  //     return of({ isAuthenticated: false });
-  //   })
-  //  );
-  // }
-
   checkAuthStatus(): Observable<{ isAuthenticated: boolean }> {
   return this.http.get<boolean>(`${this.apiUrl}/is-authenticated`).pipe(
     map(isAuth => ({ isAuthenticated: isAuth })),
@@ -118,36 +108,6 @@ export class AuthService {
 }
 
 
-
-
-// initializeLoginStatus(): Observable<void> {
-
-//   this.isLoggedInSubject.next(false);
-//   this.currentUserSubject.next(null);
-
-//   return this.checkAuthStatus().pipe(
-//     switchMap(res => {
-//       this.isLoggedInSubject.next(res.isAuthenticated);
-
-//       if (res.isAuthenticated) {
-//         return this.getCurrentUser().pipe(
-//           tap(user => this.currentUserSubject.next(user)),
-//           mapTo(void 0)
-//         );
-//       }
-
-//       this.currentUserSubject.next(null);
-//       return of(void 0);
-//     }),
-//     catchError(err => {
-//       console.warn('Initialize login status failed:', err);
-//       this.isLoggedInSubject.next(false);
-//       this.currentUserSubject.next(null);
-//       return of(void 0);
-//     })
-//   );
-// }
-
 initializeLoginStatus(): Observable<void> {
   // Reset initially
   this.isLoggedInSubject.next(false);
@@ -163,7 +123,6 @@ initializeLoginStatus(): Observable<void> {
         );
       }
 
-      // Not authenticated — but maybe refresh can fix that
       return this.refreshToken().pipe(
         switchMap(() => this.getCurrentUser()),
         tap(user => {

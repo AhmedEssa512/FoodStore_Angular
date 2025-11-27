@@ -44,7 +44,7 @@ export const routes: Routes = [
   {
     path: 'auth',
     loadChildren: () =>
-      import('./features/auth/auth.routes').then((m) => m.AUTH_ROUTES),
+     import('./features/auth/auth.routes').then((m) => m.AUTH_ROUTES),
   },
 
   // Lazy-loaded Admin area
